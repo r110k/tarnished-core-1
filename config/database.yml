@@ -33,7 +33,10 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: tarnishedcore_1_test
+  database: tarnished_test
+  username: tarnished
+  password: tar123nished456_
+  host: localhost
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
