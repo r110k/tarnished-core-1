@@ -11,7 +11,7 @@ yes | rm $deploy_dir/tarnishedcore-*.tar.gz;
 sync
 tar --exclude="tmp/cache/*" -czv -f $dist *
 mkdir -p $deploy_dir
-cp $current_dir/../config/host.Dockerfile $deploy_dir/Dockerfile
+cp $current_dir/../config/local.Dockerfile $deploy_dir/Dockerfile
 cp $current_dir/starter.sh $deploy_dir/
 mv $dist $deploy_dir
 echo $time > $deploy_dir/version
