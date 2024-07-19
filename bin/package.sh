@@ -4,10 +4,11 @@ dir=tarnishedcore-1
 time=$(date +'%Y%m%d-%H%M%S')
 dist=tmp/tarnishedcore-1-$time.tar.gz
 current_dir=$(dirname $0)
-deploy_dir=~/workspace/$dir/tarnishedcore_deploy
+deploy_dir=$HOME/workspace/$dir/tarnishedcore_deploy
 
 yes | rm tmp/tarnishedcore-*.tar.gz;
 yes | rm $deploy_dir/tarnishedcore-*.tar.gz;
+sync
 tar --exclude="tmp/cache/*" -czv -f $dist *
 mkdir -p $deploy_dir
 cp $current_dir/../config/host.Dockerfile $deploy_dir/Dockerfile

@@ -26,7 +26,7 @@ development:
   database: tarnished_dev
   username: tarnished
   password: <%= ENV["DB_PASSWORD"] %>
-  host: localhost
+  host: 101.43.49.196
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -63,4 +63,4 @@ production:
   database: tarnishedcore_prod
   username: tarnished
   password: <%= ENV["DB_PASSWORD"] %>
-  host: http://101.43.49.196
+  host: <%= ENV["DB_HOST"] %>
