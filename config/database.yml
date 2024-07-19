@@ -60,6 +60,7 @@ test:
 #
 production:
   <<: *default
-  database: tarnishedcore_1_production
-  username: tarnishedcore_1
-  password: <%= ENV["TARNISHEDCORE_1_DATABASE_PASSWORD"] %>
+  database: tarnishedcore_prod
+  username: tarnished
+  password: <%= ENV["DB_PASSWORD"] %>
+  host: http://101.43.49.196
