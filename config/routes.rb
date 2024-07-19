@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get '/', to: 'home#index'
+
   namespace :api do
     namespace :v1 do
       resources :validation_codes, only: [:create]
