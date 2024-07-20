@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>欢迎页面</title>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <style>
+    * { margin: 0; padding: 0; }
+  </style>
+</head >
+<body style="background: rgb(27,54,59);">
+  <div style="background: rgb(27,54,59);
+              padding: 20px; padding-bottom: 400px;">
+    <div style="background: rgb(239,239,101); height: 60px; 
+                border-top-left-radius: 30px; border-top-right-radius: 30px; padding-top: 15px; 
+                text-align: center; font-weight: bold;">
+      褪色者啊，迎接赐福吧</div>
+    <div style='margin-top: -25px; background: rgb(255,255,255); 
+                border-radius:15px; padding: 8px;
+                height: 120px; font-weight: bold;
+                box-shadow: 2px 4px 100px 2px red;'>
+      <div style="font-size: 14px;">🎇 你的口令</div>
+      <div style="font-size: 64px ;text-align: center; margin-top: 8px;">
+         <%= @code %>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
