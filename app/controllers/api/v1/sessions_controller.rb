@@ -1,3 +1,5 @@
+require 'jwt'
+
 class Api::V1::SessionsController < ApplicationController
   def create
     if Rails.env.test?
@@ -11,8 +13,10 @@ class Api::V1::SessionsController < ApplicationController
     if user.nil?
       render status: :not_found, json: { errors: '邮箱有误' }
     else
+      payload = { user_id: user.id }
+      token = JWT.encode payload, Rails.application.credentials.hmac_secret, 'HS256'
       render status: :ok, json: {
-        jwt: 'happy birthday!' 
+        jwt: token,
       }
     end
   end
