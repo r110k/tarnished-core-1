@@ -9,8 +9,8 @@ RSpec.describe "Items", type: :request do
       get '/api/v1/items'
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
-      expect(json['resources'].size).to eq 100
-      get '/api/v1/items?page=3'
+      expect(json['resources'].size).to eq 10
+      get '/api/v1/items?page=21'
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
