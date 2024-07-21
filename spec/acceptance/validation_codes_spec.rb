@@ -11,6 +11,6 @@ resource "验证码" do
       expect(status).to eq 200
       expect(response_body).to eq ' '
     end
-  end
 
+  end
 end
