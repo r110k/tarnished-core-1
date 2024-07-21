@@ -53,5 +53,27 @@ RSpec.describe "Items", type: :request do
       expect(json['resources'][0]['id']).to eq item1.id
     end
 
+    it "按时间筛选测试只传开始时间" do
+      item1 = Item.create amount: 200000, created_at: '1991-01-01'
+      item2 = Item.create amount: 200000, created_at: '1990-01-01'
+
+      get '/api/v1/items?created_after=1991-01-01'
+      expect(response).to have_http_status 200
+      json = JSON.parse(response.body)
+      expect(json['resources'].size).to eq 1
+      expect(json['resources'][0]['id']).to eq item1.id
+    end
+
+    it "按时间筛选测试只传结束时间" do
+      item1 = Item.create amount: 200000, created_at: '1991-01-01'
+      item2 = Item.create amount: 200000, created_at: '1991-01-02'
+
+      get '/api/v1/items?created_before=1991-01-01'
+      expect(response).to have_http_status 200
+      json = JSON.parse(response.body)
+      expect(json['resources'].size).to eq 1
+      expect(json['resources'][0]['id']).to eq item1.id
+    end
+
   end
 end
