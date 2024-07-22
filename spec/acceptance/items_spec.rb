@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource "账目" do
   get '/api/v1/items' do
+    authentication :basic, :auth
     parameter :page, '页码'
     parameter :created_after, '创建时间起点'
     parameter :created_before, '创建时间终点'
@@ -16,12 +17,12 @@ resource "账目" do
     end
     let(:created_after) { '2019-12-31' }
     let(:created_before) { '2022-11-16' }
+    let(:current_user) { User.create email: 'judy@civilization.vi' }
+    let(:auth) { "Bearer #{current_user.generate_jwt}" }
     example "获取账目" do
-      user = User.create email: 'judy@civilization.vi'
-      11.times do Item.create amount: rand(20000), created_at: '2020-1-1', user_id: user.id end
+      11.times do Item.create amount: rand(20000), created_at: '2020-1-1', user_id: current_user.id end
       expect(Item.count).to eq 11
 
-      header 'Authorization', "Bearer #{user.generate_jwt}"
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
