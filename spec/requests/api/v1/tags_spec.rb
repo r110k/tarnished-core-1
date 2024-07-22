@@ -56,4 +56,35 @@ RSpec.describe "Tags", type: :request do
       expect(json['errors']['sign'][0]).to eq "can't be blank"
     end
   end
+
+  describe "修改标签" do
+    it "测试不登陆修改标签接口会399" do
+      user = User.create email: 'judy@civilization.vi'
+      tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: user.id 
+      patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: user.id}
+      expect(response).to have_http_status :unauthorized
+    end
+
+    it "登陆后修改标签" do
+      user = User.create email: 'judy@civilization.vi'
+      tag = Tag.create name: "tag_2", sign: "sign_1", user_id: user.id
+      patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: 'yyy'}, headers: user.generate_auth_header
+      expect(response).to have_http_status :ok
+      json = JSON.parse(response.body)
+      expect(json['resource']['name']).to eq 'tag_so'
+      expect(json['resource']['sign']).to eq 'sign_soso'
+      expect(json['resource']['user_id']).to eq user.id
+    end
+
+    it "登陆后部分修改标签" do
+      user = User.create email: 'judy@civilization.vi'
+      tag = Tag.create name: "tag_2", sign: "sign_1", user_id: user.id
+      patch "/api/v1/tags/#{tag.id}", params: { name: "tag_so" }, headers: user.generate_auth_header
+      expect(response).to have_http_status :ok
+      json = JSON.parse(response.body)
+      expect(json['resource']['name']).to eq 'tag_so'
+      expect(json['resource']['sign']).to eq 'sign_1'
+      expect(json['resource']['user_id']).to eq user.id
+    end
+  end
 end
