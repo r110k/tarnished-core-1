@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>验证码 API</title>
+    <title>会话 API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,11 +106,11 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>验证码 API</h1>
+      <h1>会话 API</h1>
 
       <div class="article">
-        <h2>请求发送验证码</h2>
-        <h3>POST /api/v1/validation_codes</h3>
+        <h2>登录</h2>
+        <h3>POST /api/v1/session</h3>
 
           <h3>Parameters</h3>
           <table class="parameters table table-striped table-bordered table-condensed">
@@ -122,16 +122,43 @@ table th, table td {
             </thead>
             <tbody>
               <tr>
-                <td>
+                <td class="required">
                     <span class="name">email</span>
                 </td>
                 <td>
-                  <span class="description">Email</span>
+                  <span class="description">邮箱</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">code</span>
+                </td>
+                <td>
+                  <span class="description">验证码</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">jwt</span>
+                </td>
+                <td>
+                  <span class="description">用于验证用户身份的 token</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
           <h3>Request</h3>
 
@@ -143,11 +170,11 @@ Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/validation_codes</pre>
+          <pre class="request route highlight">POST /api/v1/session</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"email":"xuxian@xihu.history"}</pre>
+            <pre class="request body">{"email":"judy@civilization.vi","code":"926401"}</pre>
 
 
             <h3>Response</h3>
@@ -158,17 +185,19 @@ X-Content-Type-Options: nosniff
 X-Download-Options: noopen
 X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
-Content-Type: text/plain; charset=utf-8
+Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;36a9e7f1c95b82ffb99743e0c5c4ce95&quot;
+ETag: W/&quot;2bcb8f50407d39c8632521473affc93c&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: a9899519-93d6-419b-b870-47f8b68b86aa
-X-Runtime: 0.017885
-Content-Length: 1</pre>
+X-Request-Id: 047cb793-9871-44a9-9562-86581b194e33
+X-Runtime: 0.004705
+Content-Length: 118</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body"> </pre>
+              <pre class="response body">{
+  &quot;jwt&quot;: &quot;eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxODUsImV4cCI6MTcyMTYzOTg2MX0.CY38MXPt9_XA9N3U6WAQbEdXKEJeZpQwfRywd0ulmzo&quot;
+}</pre>
       </div>
     </div>
   </body>
