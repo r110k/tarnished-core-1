@@ -3,14 +3,32 @@ require 'rails_helper'
 RSpec.describe "Items", type: :request do
   describe "获取账目" do
 
-    it "分页" do
-      201.times { Item.create amount: rand(20000) }
-      expect(Item.count).to eq 201
+    it "测试不登陆调用分页接口会401" do
+      11.times { Item.create amount: rand(200000) }
+      expect(Item.count).to eq 11
       get '/api/v1/items'
+      expect(response).to have_http_status :unauthorized
+    end
+
+    it "分页" do
+      user1 = User.create email: 'qin@civilization.vi'
+      user2 = User.create email: 'judy@civilization.vi'
+      expect(User.count).to eq 2
+
+      11.times { Item.create amount: rand(200000), user_id: user1.id }
+      21.times { Item.create amount: rand(400000), user_id: user2.id }
+      expect(Item.count).to eq 32
+
+      post '/api/v1/session', params: { email: user1.email, code: '926401' }
+      data = JSON.parse response.body
+      jwt = data['jwt']
+
+      get '/api/v1/items', headers: { 'Authorization': "Bearer #{jwt}" }
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 10
-      get '/api/v1/items?page=21'
+
+      get '/api/v1/items?page=2', headers: { 'Authorization': "Bearer #{jwt}" }
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
