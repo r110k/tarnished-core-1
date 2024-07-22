@@ -17,7 +17,7 @@ resource "标签" do
       response_field :deleted_at, '删除时间'
     end
    
-    example "获取标签" do
+    example "分页获取标签列表" do
       11.times do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", user_id: current_user.id end
       do_request
       expect(status).to eq 200
@@ -86,6 +86,21 @@ resource "标签" do
     example "删除标签" do
       do_request
       expect(status).to eq 200
+    end
+  end
+
+  get '/api/v1/tags/:id' do
+    let(:tag) { Tag.create name: 'tag_1', sign: 'sign_1', user_id: current_user.id }
+    let(:id) { tag.id }
+
+    example "获取单个标签" do
+      do_request
+      expect(status).to eq 200
+
+      json = JSON.parse response_body
+      expect(json['resource']['name']).to eq tag.name
+      expect(json['resource']['sign']).to eq tag.sign
+      expect(json['resource']['user_id']).to eq current_user.id
     end
   end
 end

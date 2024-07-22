@@ -109,7 +109,7 @@ table th, table td {
       <h1>标签 API</h1>
 
       <div class="article">
-        <h2>获取标签</h2>
+        <h2>分页获取标签列表</h2>
         <h3>GET /api/v1/tags</h3>
 
           <h3>Parameters</h3>
@@ -188,7 +188,7 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNzcsImV4cCI6MTcyMTY2NjA1NX0.otymC6gqnEOgJwjfeLYUBRrFcA_xrl0UPX-CchG5cNU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNDcsImV4cCI6MTcyMTY2OTQyM30.qxbSLZTX_hrml6KyImCiHYxCoileMMnVEPa2eiyhvrw
 Accept: application/json
 Content-Type: application/json
 Host: example.org
@@ -210,10 +210,10 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;79c291f2ba95652b25eb37715b1376ca&quot;
+ETag: W/&quot;2627a747c32b658457993e5571ae3b71&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: d2f6b104-c33f-4f3c-90ec-9edb21f15a84
-X-Runtime: 0.006877
+X-Request-Id: a1d55d04-2af8-40ab-a903-71a53ee90abf
+X-Runtime: 0.006872
 Content-Length: 1579</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
@@ -221,94 +221,94 @@ Content-Length: 1579</pre>
               <pre class="response body">{
   &quot;resources&quot;: [
     {
-      &quot;id&quot;: 638,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 780,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag0&quot;,
       &quot;sign&quot;: &quot;sign0&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.969Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.969Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.523Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.523Z&quot;
     },
     {
-      &quot;id&quot;: 639,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 781,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag1&quot;,
       &quot;sign&quot;: &quot;sign1&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.972Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.972Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.526Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.526Z&quot;
     },
     {
-      &quot;id&quot;: 640,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 782,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag2&quot;,
       &quot;sign&quot;: &quot;sign2&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.975Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.975Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.529Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.529Z&quot;
     },
     {
-      &quot;id&quot;: 641,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 783,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag3&quot;,
       &quot;sign&quot;: &quot;sign3&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.977Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.977Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.531Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.531Z&quot;
     },
     {
-      &quot;id&quot;: 642,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 784,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag4&quot;,
       &quot;sign&quot;: &quot;sign4&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.980Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.980Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.534Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.534Z&quot;
     },
     {
-      &quot;id&quot;: 643,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 785,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag5&quot;,
       &quot;sign&quot;: &quot;sign5&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.982Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.982Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.537Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.537Z&quot;
     },
     {
-      &quot;id&quot;: 644,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 786,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag6&quot;,
       &quot;sign&quot;: &quot;sign6&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.985Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.985Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.539Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.539Z&quot;
     },
     {
-      &quot;id&quot;: 645,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 787,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag7&quot;,
       &quot;sign&quot;: &quot;sign7&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.987Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.987Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.542Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.542Z&quot;
     },
     {
-      &quot;id&quot;: 646,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 788,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag8&quot;,
       &quot;sign&quot;: &quot;sign8&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.990Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.990Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.544Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.544Z&quot;
     },
     {
-      &quot;id&quot;: 647,
-      &quot;user_id&quot;: 177,
+      &quot;id&quot;: 789,
+      &quot;user_id&quot;: 247,
       &quot;name&quot;: &quot;tag9&quot;,
       &quot;sign&quot;: &quot;sign9&quot;,
       &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-22T14:34:15.992Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-22T14:34:15.992Z&quot;
+      &quot;created_at&quot;: &quot;2024-07-22T15:30:23.547Z&quot;,
+      &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.547Z&quot;
     }
   ],
   &quot;pager&quot;: {

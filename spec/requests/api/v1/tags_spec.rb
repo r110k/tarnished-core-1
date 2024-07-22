@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Tags", type: :request do
-  describe "获取标签" do
+  describe "获取标签列表" do
     it "测试不登陆获取标签接口会401" do
       get '/api/v1/tags'
       expect(response).to have_http_status :unauthorized
@@ -115,6 +115,36 @@ RSpec.describe "Tags", type: :request do
       # tag.reload 等价于重新查一遍数据库 tag = Tag.find tag.id
       tag.reload
       expect(tag.deleted_at).to eq nil
+    end
+  end
+
+   describe "获取单个标签" do
+    it "测试不登陆获取标签接口会401" do
+      user = User.create email: 'judy@civilization.vi'
+      tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: user.id 
+      get "/api/v1/tags/#{tag.id}"
+      expect(response).to have_http_status :unauthorized
+    end
+
+    it "登陆后获取单个标签" do
+      user = User.create email: 'judy@civilization.vi'
+      tag = Tag.create  name: "tag_1", sign: "sign_1", user_id: user.id 
+
+      get "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
+      expect(response).to have_http_status :ok
+      json = JSON.parse(response.body)
+      expect(json['resource']['name']).to eq 'tag_1'
+      expect(json['resource']['sign']).to eq 'sign_1'
+      expect(json['resource']['user_id']).to eq user.id
+    end
+
+     it "登陆后不能获取别人的单个标签" do
+      user = User.create email: 'judy@civilization.vi'
+      another_user = User.create email: 'tian@civilization.vi'
+      tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: another_user.id 
+
+      get "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
+      expect(response).to have_http_status :forbidden
     end
   end
 end

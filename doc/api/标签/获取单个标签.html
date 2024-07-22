@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>会话 API</title>
+    <title>标签 API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,75 +106,28 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>会话 API</h1>
+      <h1>标签 API</h1>
 
       <div class="article">
-        <h2>登录</h2>
-        <h3>POST /api/v1/session</h3>
+        <h2>获取单个标签</h2>
+        <h3>GET /api/v1/tags/:id</h3>
 
-          <h3>Parameters</h3>
-          <table class="parameters table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="required">
-                    <span class="name">email</span>
-                </td>
-                <td>
-                  <span class="description">邮箱</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">code</span>
-                </td>
-                <td>
-                  <span class="description">验证码</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">jwt</span>
-                </td>
-                <td>
-                  <span class="description">用于验证用户身份的 token</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNTEsImV4cCI6MTcyMTY2OTQyM30.hgxz586uaDN51709uRoDtE0n71KPEko75sxxpx6UiYU
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/session</pre>
+          <pre class="request route highlight">GET /api/v1/tags/794</pre>
 
 
-            <h4>Body</h4>
-            <pre class="request body">{"email":"judy@civilization.vi","code":"926401"}</pre>
 
 
             <h3>Response</h3>
@@ -187,16 +140,24 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;38aa9de31ecbc569c4b9fca022b09310&quot;
+ETag: W/&quot;d57b044f203bc8db30314fb91edd2a99&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: 5f440d14-a335-481f-b724-5798c3eed679
-X-Runtime: 0.004314
-Content-Length: 118</pre>
+X-Request-Id: 82bfd729-ef07-4e3d-94ec-4ac2703a34c1
+X-Runtime: 0.002942
+Content-Length: 166</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;jwt&quot;: &quot;eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNDYsImV4cCI6MTcyMTY2OTQyM30.XM82tDGrz28lg88vGSRdkLkByZsriYfxKZwxOk-uXdY&quot;
+  &quot;resource&quot;: {
+    &quot;id&quot;: 794,
+    &quot;user_id&quot;: 251,
+    &quot;name&quot;: &quot;tag_1&quot;,
+    &quot;sign&quot;: &quot;sign_1&quot;,
+    &quot;deleted_at&quot;: null,
+    &quot;created_at&quot;: &quot;2024-07-22T15:30:23.599Z&quot;,
+    &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.599Z&quot;
+  }
 }</pre>
       </div>
     </div>
