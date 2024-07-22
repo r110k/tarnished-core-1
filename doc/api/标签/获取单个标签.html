@@ -113,19 +113,70 @@ table th, table td {
         <h3>GET /api/v1/tags/:id</h3>
 
 
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">resources[id]</span>
+                </td>
+                <td>
+                  <span class="description">ID</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[name]</span>
+                </td>
+                <td>
+                  <span class="description">名称</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[sign]</span>
+                </td>
+                <td>
+                  <span class="description">符号</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[user_id]</span>
+                </td>
+                <td>
+                  <span class="description">用户 ID</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[deleted_at]</span>
+                </td>
+                <td>
+                  <span class="description">删除时间</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
           <h3>Request</h3>
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNTEsImV4cCI6MTcyMTY2OTQyM30.hgxz586uaDN51709uRoDtE0n71KPEko75sxxpx6UiYU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNTgsImV4cCI6MTcyMTY2OTcyOH0.505KXRGDPsku8nFwBwXpQ1ZRueZ31BlZZ2xUlYxy4Lw
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/tags/794</pre>
+          <pre class="request route highlight">GET /api/v1/tags/809</pre>
 
 
 
@@ -140,23 +191,23 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;d57b044f203bc8db30314fb91edd2a99&quot;
+ETag: W/&quot;7ad32d63173e29d8dbf889b96798a8b4&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: 82bfd729-ef07-4e3d-94ec-4ac2703a34c1
-X-Runtime: 0.002942
+X-Request-Id: 5b080d96-5cb7-49c8-8329-88ec54f53afc
+X-Runtime: 0.003105
 Content-Length: 166</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;resource&quot;: {
-    &quot;id&quot;: 794,
-    &quot;user_id&quot;: 251,
+    &quot;id&quot;: 809,
+    &quot;user_id&quot;: 258,
     &quot;name&quot;: &quot;tag_1&quot;,
     &quot;sign&quot;: &quot;sign_1&quot;,
     &quot;deleted_at&quot;: null,
-    &quot;created_at&quot;: &quot;2024-07-22T15:30:23.599Z&quot;,
-    &quot;updated_at&quot;: &quot;2024-07-22T15:30:23.599Z&quot;
+    &quot;created_at&quot;: &quot;2024-07-22T15:35:28.793Z&quot;,
+    &quot;updated_at&quot;: &quot;2024-07-22T15:35:28.793Z&quot;
   }
 }</pre>
       </div>
