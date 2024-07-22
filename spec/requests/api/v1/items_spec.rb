@@ -29,16 +29,12 @@ RSpec.describe "Items", type: :request do
       21.times { Item.create amount: rand(400000), user_id: user2.id }
       expect(Item.count).to eq 32
 
-      post '/api/v1/session', params: { email: user1.email, code: '926401' }
-      data = JSON.parse response.body
-      jwt = data['jwt']
-
-      get '/api/v1/items', headers: { 'Authorization': "Bearer #{jwt}" }
+      get '/api/v1/items', headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 10
 
-      get '/api/v1/items?page=2', headers: { 'Authorization': "Bearer #{jwt}" }
+      get '/api/v1/items?page=2', headers: user1.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
@@ -50,8 +46,7 @@ RSpec.describe "Items", type: :request do
       item2 = Item.create amount: 200000, created_at: '1991-1-2', user_id: user.id
       item3 = Item.create amount: 10000, created_at: '1992-1-1', user_id: user.id
 
-      headers = sign_in user
-      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-3', headers: headers
+      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-3', headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 2
@@ -68,11 +63,7 @@ RSpec.describe "Items", type: :request do
       # 解决方案2, 统一使用一个时区，使用字符串
       item1 = Item.create amount: 200000, created_at: '1991-01-01', user_id: user.id
 
-      post '/api/v1/session', params: { email: user.email, code: '926401' }
-      data = JSON.parse response.body
-      jwt = data['jwt']
-
-      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-2', headers: { 'Authorization': "Bearer #{jwt}" }
+      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-2', headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
@@ -84,11 +75,7 @@ RSpec.describe "Items", type: :request do
       item1 = Item.create amount: 200000, created_at: '1991-01-01', user_id: user.id
       item2 = Item.create amount: 200000, created_at: '1990-01-01', user_id: user.id
 
-      post '/api/v1/session', params: { email: user.email, code: '926401' }
-      data = JSON.parse response.body
-      jwt = data['jwt']
-
-      get '/api/v1/items?created_after=1991-01-01', headers: { 'Authorization': "Bearer #{jwt}" }
+      get '/api/v1/items?created_after=1991-01-01', headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
@@ -100,11 +87,7 @@ RSpec.describe "Items", type: :request do
       item1 = Item.create amount: 200000, created_at: '1991-01-01', user_id: user.id
       item2 = Item.create amount: 200000, created_at: '1991-01-02', user_id: user.id
 
-      post '/api/v1/session', params: { email: user.email, code: '926401' }
-      data = JSON.parse response.body
-      jwt = data['jwt']
-
-      get '/api/v1/items?created_before=1991-01-01', headers: { 'Authorization': "Bearer #{jwt}" }
+      get '/api/v1/items?created_before=1991-01-01', headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1

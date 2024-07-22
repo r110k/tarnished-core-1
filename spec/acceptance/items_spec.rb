@@ -21,14 +21,7 @@ resource "账目" do
       11.times do Item.create amount: rand(20000), created_at: '2020-1-1', user_id: user.id end
       expect(Item.count).to eq 11
 
-      jwt = ''
-      no_doc do
-        client.post '/api/v1/session', email: user.email, code: '926401'
-        json = JSON.parse response_body
-        jwt = json['jwt']
-      end
-
-      header 'Authorization', "Bearer #{jwt}"
+      header 'Authorization', "Bearer #{user.generate_jwt}"
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
