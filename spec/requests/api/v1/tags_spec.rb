@@ -58,7 +58,7 @@ RSpec.describe "Tags", type: :request do
   end
 
   describe "修改标签" do
-    it "测试不登陆修改标签接口会399" do
+    it "测试不登陆修改标签接口会401" do
       user = User.create email: 'judy@civilization.vi'
       tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: user.id 
       patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: user.id}
@@ -85,6 +85,36 @@ RSpec.describe "Tags", type: :request do
       expect(json['resource']['name']).to eq 'tag_so'
       expect(json['resource']['sign']).to eq 'sign_1'
       expect(json['resource']['user_id']).to eq user.id
+    end
+  end
+
+  describe "删除标签" do
+    it "测试不登陆删除标签接口会401" do
+      user = User.create email: 'judy@civilization.vi'
+      tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: user.id 
+      delete "/api/v1/tags/#{tag.id}"
+      expect(response).to have_http_status :unauthorized
+    end
+
+    it "登陆后删除标签" do
+      user = User.create email: 'judy@civilization.vi'
+      tag = Tag.create name: "tag_2", sign: "sign_1", user_id: user.id
+      delete "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
+      expect(response).to have_http_status :ok
+      # tag.reload 等价于重新查一遍数据库 tag = Tag.find tag.id
+      tag.reload
+      expect(tag.deleted_at).not_to eq nil
+    end
+
+    it "登陆后删除别人的标签" do
+      user = User.create email: 'judy@civilization.vi'
+      another_user = User.create email: 'tian@civilization.vi'
+      tag = Tag.create name: "tag_2", sign: "sign_1", user_id: another_user.id
+      delete "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
+      expect(response).to have_http_status :forbidden
+      # tag.reload 等价于重新查一遍数据库 tag = Tag.find tag.id
+      tag.reload
+      expect(tag.deleted_at).to eq nil
     end
   end
 end
