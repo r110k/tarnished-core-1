@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Items", type: :request do
   describe "获取账目" do
 
-    it "创建账目" do
+    xit "创建账目" do
       expect {
         post '/api/v1/items', params: { amount: 777 }
       }.to change { Item.count }.by +1

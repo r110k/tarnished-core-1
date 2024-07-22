@@ -25,8 +25,6 @@ RSpec.describe "Mes", type: :request do
 
       travel_back
       get '/api/v1/me', headers: { 'Authorization': "Bearer #{jwt}" }
-      p 'response ----------------------------------------'
-      p response
       expect(response).to have_http_status :unauthorized
     end
 
@@ -37,8 +35,6 @@ RSpec.describe "Mes", type: :request do
 
       travel_back
       get '/api/v1/me', headers: { 'Authorization': "Bearer #{jwt}" }
-      p 'response ----------------------------------------'
-      p response
       expect(response).to have_http_status :ok
     end
   end
