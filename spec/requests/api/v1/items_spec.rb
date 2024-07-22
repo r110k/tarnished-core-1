@@ -50,11 +50,8 @@ RSpec.describe "Items", type: :request do
       item2 = Item.create amount: 200000, created_at: '1991-1-2', user_id: user.id
       item3 = Item.create amount: 10000, created_at: '1992-1-1', user_id: user.id
 
-      post '/api/v1/session', params: { email: user.email, code: '926401' }
-      data = JSON.parse response.body
-      jwt = data['jwt']
-
-      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-3', headers: { 'Authorization': "Bearer #{jwt}" }
+      headers = sign_in user
+      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-3', headers: headers
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 2
