@@ -165,5 +165,40 @@ RSpec.describe "Items", type: :request do
       expect(json['groups'][2]['happened_at']).to eq '2024-07-27'
       expect(json['groups'][2]['amount']).to eq 30000
     end
+
+     it "按标签分组" do
+      user = User.create email: 'judy@civilization.vi'
+      tag1 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
+      tag2 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
+      tag3 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
+
+      # tag1: 50
+      Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag1.id, tag2.id]
+      # tag2: 60
+      Item.create! amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag1.id, tag3.id]
+      # tag3: 90
+      Item.create! amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag2.id, tag3.id]
+     
+      get '/api/v1/items/summary', params: {
+        happened_after: '2023-12-31',
+        happened_before: '2025-1-1',
+        kind: :income,
+        group_by: :tag_id,
+      }, headers: user.generate_auth_header
+      expect(response).to have_http_status 200
+      json = JSON.parse(response.body)
+      p 'json ---------------------------------------'
+      p json
+      expect(json['groups'].size).to eq 3
+      expect(json['groups'][0]['tag_id']).to eq tag3.id
+      expect(json['groups'][0]['amount']).to eq 9000
+      expect(json['groups'][1]['tag_id']).to eq tag2.id
+      expect(json['groups'][1]['amount']).to eq 6000
+      expect(json['groups'][2]['tag_id']).to eq tag1.id
+      expect(json['groups'][2]['amount']).to eq 5000
+    end
   end
 end
