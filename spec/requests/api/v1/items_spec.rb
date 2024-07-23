@@ -6,14 +6,31 @@ RSpec.describe "Items", type: :request do
       post '/api/v1/items'
       expect(response).to have_http_status :unauthorized
     end
+
     it "可以创建账目" do
       user = User.create email: 'judy@civilization.vi'
-      post '/api/v1/items', params: { amount: "888" } ,headers: user.generate_auth_header
+      tag1 = Tag.create name: 'tag1', sign: 'sign1', user_id: user.id
+      tag2 = Tag.create name: 'tag2', sign: 'sign2', user_id: user.id
+
+      post '/api/v1/items', params: { amount: "888", tags_id: [tag1.id, tag2.id], happened_at: '2024-7-23T00:00:00+08:00' } ,headers: user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
+      expect(json['resource']['id']).to be_an Numeric
       expect(json['resource']['amount']).to eq 888
       expect(json['resource']['user_id']).to eq user.id
+      expect(json['resource']['happened_at']).to eq '2024-07-22T16:00:00.000Z'
     end
+
+    it "创建账目时 amount、tags_id 必填" do
+      user = User.create email: 'judy@civilization.vi'
+      post '/api/v1/items', params: {} ,headers: user.generate_auth_header
+      expect(response).to have_http_status :unprocessable_entity
+      json = JSON.parse(response.body)
+      expect(json['errors']['amount'][0]).to eq "can't be blank"
+      expect(json['errors']['tags_id'][0]).to eq "can't be blank"
+      expect(json['errors']['happened_at'][0]).to eq "can't be blank"
+    end
+
   end
 
   describe "获取账目" do

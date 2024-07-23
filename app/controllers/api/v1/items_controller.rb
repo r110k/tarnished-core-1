@@ -3,12 +3,12 @@ class Api::V1::ItemsController < ApplicationController
     current_user = User.find request.env['current_user_id']
     return render status: :unauthorized if current_user.nil?
 
-    item = Item.new params.permit(:amount, :tags_id, :happen_at)
+    item = Item.new params.permit(:amount, :happened_at, :kind, tags_id: [])
     item.user_id = current_user.id
     if item.save
       render json: { resource: item }
     else
-      render json: { errors: item.errors }
+      render json: { errors: item.errors }, status: :unprocessable_entity
     end
   end
 
