@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>标签 API</title>
+    <title>账目 API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,11 +106,11 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>标签 API</h1>
+      <h1>账目 API</h1>
 
       <div class="article">
-        <h2>分页获取标签列表</h2>
-        <h3>GET /api/v1/tags</h3>
+        <h2>创建标签</h2>
+        <h3>POST /api/v1/items</h3>
 
           <h3>Parameters</h3>
           <table class="parameters table table-striped table-bordered table-condensed">
@@ -122,11 +122,35 @@ table th, table td {
             </thead>
             <tbody>
               <tr>
-                <td>
-                    <span class="name">page</span>
+                <td class="required">
+                    <span class="name">amount</span>
                 </td>
                 <td>
-                  <span class="description">页码</span>
+                  <span class="description">金额（单位：分）</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">kind</span>
+                </td>
+                <td>
+                  <span class="description">类型</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">tags_id</span>
+                </td>
+                <td>
+                  <span class="description">发生时间</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">happened_at</span>
+                </td>
+                <td>
+                  <span class="description">标签列表（只传id）</span>
                 </td>
               </tr>
             </tbody>
@@ -151,18 +175,34 @@ table th, table td {
               </tr>
               <tr>
                 <td>
-                    <span class="name">resources[name]</span>
+                    <span class="name">resources[amount]</span>
                 </td>
                 <td>
-                  <span class="description">名称</span>
+                  <span class="description">金额（单位：分）</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">resources[sign]</span>
+                    <span class="name">resources[kind]</span>
                 </td>
                 <td>
-                  <span class="description">符号</span>
+                  <span class="description">类型</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[happened_at]</span>
+                </td>
+                <td>
+                  <span class="description">发生时间</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">resources[tags_id]</span>
+                </td>
+                <td>
+                  <span class="description">标签列表（只传id）</span>
                 </td>
               </tr>
               <tr>
@@ -188,16 +228,18 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxODksImV4cCI6MTcyMTc1NzQwMH0.4B_n4tuZEwwr0WS_oaMaCH741bN0walcaicLk9hhOEE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxODcsImV4cCI6MTcyMTc1NzQwMH0.2tGjWUN3DlBH46YobA2JGBLgTMp-5gHtTk7IaMSPex8
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/tags</pre>
+          <pre class="request route highlight">POST /api/v1/items</pre>
 
 
+            <h4>Body</h4>
+            <pre class="request body">{"amount":77700,"kind":"income","tags_id":[238,239,240,241],"happened_at":"2024-8-23T00:00:00+08:00"}</pre>
 
 
             <h3>Response</h3>
@@ -210,111 +252,30 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;1cfc732d070f424445353637db10bae4&quot;
+ETag: W/&quot;85d1cc8f851be30829996b02d2eb1290&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: b1d41b8c-dff2-4edd-bb3d-5bde0fbe2582
-X-Runtime: 0.006499
-Content-Length: 1579</pre>
+X-Request-Id: ce5e945b-f4b1-4a9d-a53d-623493fde976
+X-Runtime: 0.006291
+Content-Length: 229</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;resources&quot;: [
-    {
-      &quot;id&quot;: 242,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag0&quot;,
-      &quot;sign&quot;: &quot;sign0&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.325Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.325Z&quot;
-    },
-    {
-      &quot;id&quot;: 243,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag1&quot;,
-      &quot;sign&quot;: &quot;sign1&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.327Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.327Z&quot;
-    },
-    {
-      &quot;id&quot;: 244,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag2&quot;,
-      &quot;sign&quot;: &quot;sign2&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.330Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.330Z&quot;
-    },
-    {
-      &quot;id&quot;: 245,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag3&quot;,
-      &quot;sign&quot;: &quot;sign3&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.332Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.332Z&quot;
-    },
-    {
-      &quot;id&quot;: 246,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag4&quot;,
-      &quot;sign&quot;: &quot;sign4&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.335Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.335Z&quot;
-    },
-    {
-      &quot;id&quot;: 247,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag5&quot;,
-      &quot;sign&quot;: &quot;sign5&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.338Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.338Z&quot;
-    },
-    {
-      &quot;id&quot;: 248,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag6&quot;,
-      &quot;sign&quot;: &quot;sign6&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.340Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.340Z&quot;
-    },
-    {
-      &quot;id&quot;: 249,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag7&quot;,
-      &quot;sign&quot;: &quot;sign7&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.342Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.342Z&quot;
-    },
-    {
-      &quot;id&quot;: 250,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag8&quot;,
-      &quot;sign&quot;: &quot;sign8&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.345Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.345Z&quot;
-    },
-    {
-      &quot;id&quot;: 251,
-      &quot;user_id&quot;: 189,
-      &quot;name&quot;: &quot;tag9&quot;,
-      &quot;sign&quot;: &quot;sign9&quot;,
-      &quot;deleted_at&quot;: null,
-      &quot;created_at&quot;: &quot;2024-07-23T15:56:40.347Z&quot;,
-      &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.347Z&quot;
-    }
-  ],
-  &quot;pager&quot;: {
-    &quot;page&quot;: 1,
-    &quot;per_page&quot;: 10,
-    &quot;total&quot;: 11
+  &quot;resource&quot;: {
+    &quot;id&quot;: 119,
+    &quot;user_id&quot;: 187,
+    &quot;amount&quot;: 77700,
+    &quot;note&quot;: null,
+    &quot;happened_at&quot;: &quot;2024-08-22T16:00:00.000Z&quot;,
+    &quot;tags_id&quot;: [
+      238,
+      239,
+      240,
+      241
+    ],
+    &quot;created_at&quot;: &quot;2024-07-23T15:56:40.307Z&quot;,
+    &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.307Z&quot;,
+    &quot;kind&quot;: &quot;income&quot;
   }
 }</pre>
       </div>
