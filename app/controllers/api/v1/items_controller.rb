@@ -27,4 +27,29 @@ class Api::V1::ItemsController < ApplicationController
       }
     }
   end
+
+  def summary 
+    hash = Hash.new
+    current_user_id = request.env['current_user_id']
+    return head :unauthorized if current_user_id.nil?
+
+    items = Item.where(user_id: current_user_id)
+      .where(kind: params[:kind])
+      .where(happened_at: params[:happened_after]..params[:happened_before])
+    items.each do |x|
+      key = x.happened_at.in_time_zone('Beijing').strftime('%F')
+      hash[key] ||= 0
+      hash[key] += x.amount
+    end
+    # groups = hash.map { |key, value| { :happened_at: key, amount: value } }
+    # # <=> spaceship sign 用 A - B -1 升序 （感叹号是原地自升，不生成新的）
+    # groups.sort! { |a, b| a[:happened_at] <=> b[:happened_at] }
+    # 上面三行可以使用链式调用改写为
+    groups = hash.map { |key, value| { happened_at: key, amount: value } }
+      .sort! { |a, b| a[:happened_at] <=> b[:happened_at] }
+    render json: {
+      groups: groups,
+      total: items.sum(:amount)
+    }
+  end
 end

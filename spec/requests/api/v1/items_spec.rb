@@ -116,4 +116,54 @@ RSpec.describe "Items", type: :request do
     end
 
   end
+
+  describe "统计" do
+    it "按天分组" do
+      user = User.create email: 'judy@civilization.vi'
+      tag = Tag.create name: "tag1", sign: "sign1", user_id: user.id
+
+      # 7-21: 10
+      Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+
+      # 7-27 300
+      Item.create! amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+      Item.create! amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+      Item.create! amount: 6000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+      Item.create! amount: 7000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+      Item.create! amount: 8000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+
+      # 7-23 50
+      Item.create! amount: 2000, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+      Item.create! amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+      Item.create! amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
+          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+
+
+      get '/api/v1/items/summary', params: {
+        happened_after: '2023-12-31',
+        happened_before: '2025-1-1',
+        kind: :income,
+        group_by: :happened_at,
+      }, headers: user.generate_auth_header
+      expect(response).to have_http_status 200
+      json = JSON.parse(response.body)
+      p 'json ---------------------------------------'
+      p json
+      expect(json['groups'].size).to eq 3
+      expect(json['groups'][0]['happened_at']).to eq '2024-07-21'
+      expect(json['groups'][0]['amount']).to eq 1000
+      expect(json['groups'][1]['happened_at']).to eq '2024-07-23'
+      expect(json['groups'][1]['amount']).to eq 5000
+      expect(json['groups'][2]['happened_at']).to eq '2024-07-27'
+      expect(json['groups'][2]['amount']).to eq 30000
+    end
+  end
 end
