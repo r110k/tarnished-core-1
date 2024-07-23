@@ -1,6 +1,10 @@
 class Api::V1::ItemsController < ApplicationController
   def create
-    item = Item.new amount: params[:amount]
+    current_user = User.find request.env['current_user_id']
+    return render status: :unauthorized if current_user.nil?
+
+    item = Item.new params.permit(:amount, :tags_id, :happen_at)
+    item.user_id = current_user.id
     if item.save
       render json: { resource: item }
     else

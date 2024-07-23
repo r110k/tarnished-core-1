@@ -1,18 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe "Items", type: :request do
-  describe "获取账目" do
-
-    xit "创建账目" do
-      expect {
-        post '/api/v1/items', params: { amount: 777 }
-      }.to change { Item.count }.by +1
-      expect(response).to have_http_status 200
-      json = JSON.parse(response.body)
-      expect(json['resource']['id']).to be_an(Numeric)
-      expect(json['resource']['amount']).to eq 777
+  describe "创建账目" do
+    it "未登录创建账目会报401" do
+      post '/api/v1/items'
+      expect(response).to have_http_status :unauthorized
     end
+    it "可以创建账目" do
+      user = User.create email: 'judy@civilization.vi'
+      post '/api/v1/items', params: { amount: "888" } ,headers: user.generate_auth_header
+      expect(response).to have_http_status :ok
+      json = JSON.parse(response.body)
+      expect(json['resource']['amount']).to eq 888
+      expect(json['resource']['user_id']).to eq user.id
+    end
+  end
 
+  describe "获取账目" do
     it "测试不登陆调用分页接口会401" do
       11.times { Item.create amount: rand(200000) }
       expect(Item.count).to eq 11
