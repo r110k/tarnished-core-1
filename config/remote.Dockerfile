@@ -6,7 +6,8 @@ RUN bundle config mirror.https://rubygems.org https://gems.ruby-china.com
 WORKDIR /tarnishedcore-1
 ADD Gemfile /tarnishedcore-1
 ADD Gemfile.lock /tarnishedcore-1
-ADD vendor/cache /tarnishedcore-1/vendor/cache
+ADD vendor/cache.tar.gz /tarnishedcore-1/vendor
+ADD vendor/rspec_api_documentation.tar.gz /tarnishedcore-1/vendor
 RUN bundle config set --local without 'development test'
 RUN bundle install --local
 
