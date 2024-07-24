@@ -1,7 +1,8 @@
 class ValidationCode < ApplicationRecord
-  validates :email, presence: true
-
   enum kind: { sign_in: 0, reset_password: 1 }
+
+  validates :email, presence: true
+  validates :email, format: { with: /\A.+@.+\z/i }
 
   before_create :generate_code
   after_create :send_email
