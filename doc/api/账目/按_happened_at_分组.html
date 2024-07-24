@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>标签 API</title>
+    <title>账目 API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,12 +106,55 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>标签 API</h1>
+      <h1>账目 API</h1>
 
       <div class="article">
-        <h2>获取单个标签</h2>
-        <h3>GET /api/v1/tags/:id</h3>
+        <h2>按 happened_at 分组</h2>
+        <h3>GET /api/v1/items/summary</h3>
 
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">happeneded_after</span>
+                </td>
+                <td>
+                  <span class="description">时间起点</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">happeneded_before</span>
+                </td>
+                <td>
+                  <span class="description">时间终点</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">kind</span>
+                </td>
+                <td>
+                  <span class="description">账目类型</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">group_by</span>
+                </td>
+                <td>
+                  <span class="description">分组依据</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
           <h3>Response Fields</h3>
           <table class="response-fields table table-striped table-bordered table-condensed">
@@ -124,42 +167,42 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">resources[id]</span>
+                    <span class="name">groups</span>
                 </td>
                 <td>
-                  <span class="description">ID</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[name]</span>
-                </td>
-                <td>
-                  <span class="description">名称</span>
+                  <span class="description">分组信息</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">resources[sign]</span>
+                    <span class="name">total</span>
                 </td>
                 <td>
-                  <span class="description">符号</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[user_id]</span>
-                </td>
-                <td>
-                  <span class="description">用户 ID</span>
+                  <span class="description">总金额（单位：分）</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">resources[deleted_at]</span>
+                    <span class="name">groups[amount]</span>
                 </td>
                 <td>
-                  <span class="description">删除时间</span>
+                  <span class="description">金额（单位：分）</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">groups[happened_at]</span>
+                </td>
+                <td>
+                  <span class="description">消费时间</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">groups[tag_id]</span>
+                </td>
+                <td>
+                  <span class="description">标签 id</span>
                 </td>
               </tr>
             </tbody>
@@ -169,15 +212,20 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0OTIsImV4cCI6MTcyMTgxNjkxMX0.JOxj5ajL4N7KVkIjUc3CUjhge2FqKgRtN6iX0FCTWsc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0ODUsImV4cCI6MTcyMTgxNjkxMX0.8zRha3A0V7ZWRRd79YcICVAcfITOEXsOCY9vB6Lkq14
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/tags/800</pre>
+          <pre class="request route highlight">GET /api/v1/items/summary?happeneded_after=2023-12-31&amp;happeneded_before=2025-1-1&amp;kind=income&amp;group_by=happened_at</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">happeneded_after: 2023-12-31
+happeneded_before: 2025-1-1
+kind: income
+group_by: happened_at</pre>
 
 
 
@@ -191,24 +239,30 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;0cf8075991ba513f32bf5b728b3ca2c2&quot;
+ETag: W/&quot;01c0acdbbf1c6cd1a87484377ef31bab&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: b9a942fa-c2d7-4306-b4d2-c2a1d910b766
-X-Runtime: 0.003152
-Content-Length: 166</pre>
+X-Request-Id: 95f54c88-3973-4c94-a093-c99f36583fd6
+X-Runtime: 0.005905
+Content-Length: 156</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;resource&quot;: {
-    &quot;id&quot;: 800,
-    &quot;user_id&quot;: 492,
-    &quot;name&quot;: &quot;tag_1&quot;,
-    &quot;sign&quot;: &quot;sign_1&quot;,
-    &quot;deleted_at&quot;: null,
-    &quot;created_at&quot;: &quot;2024-07-24T08:28:31.936Z&quot;,
-    &quot;updated_at&quot;: &quot;2024-07-24T08:28:31.936Z&quot;
-  }
+  &quot;groups&quot;: [
+    {
+      &quot;happened_at&quot;: &quot;2024-07-21&quot;,
+      &quot;amount&quot;: 1000
+    },
+    {
+      &quot;happened_at&quot;: &quot;2024-07-23&quot;,
+      &quot;amount&quot;: 5000
+    },
+    {
+      &quot;happened_at&quot;: &quot;2024-07-27&quot;,
+      &quot;amount&quot;: 30000
+    }
+  ],
+  &quot;total&quot;: 36000
 }</pre>
       </div>
     </div>

@@ -155,9 +155,8 @@ RSpec.describe "Items", type: :request do
       }, headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
-      p 'json ---------------------------------------'
-      p json
       expect(json['groups'].size).to eq 3
+      expect(json['total']).to eq 36000
       expect(json['groups'][0]['happened_at']).to eq '2024-07-21'
       expect(json['groups'][0]['amount']).to eq 1000
       expect(json['groups'][1]['happened_at']).to eq '2024-07-23'
@@ -190,9 +189,8 @@ RSpec.describe "Items", type: :request do
       }, headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
-      p 'json ---------------------------------------'
-      p json
       expect(json['groups'].size).to eq 3
+      expect(json['total']).to eq 10000
       expect(json['groups'][0]['tag_id']).to eq tag3.id
       expect(json['groups'][0]['amount']).to eq 9000
       expect(json['groups'][1]['tag_id']).to eq tag2.id

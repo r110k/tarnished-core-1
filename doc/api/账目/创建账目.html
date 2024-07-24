@@ -109,7 +109,7 @@ table th, table td {
       <h1>账目 API</h1>
 
       <div class="article">
-        <h2>创建标签</h2>
+        <h2>创建账目</h2>
         <h3>POST /api/v1/items</h3>
 
           <h3>Parameters</h3>
@@ -228,7 +228,7 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxODcsImV4cCI6MTcyMTc1NzQwMH0.2tGjWUN3DlBH46YobA2JGBLgTMp-5gHtTk7IaMSPex8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0ODQsImV4cCI6MTcyMTgxNjkxMX0.-20gZ8S1lh6jOVYD8wqK39u-4fvsKmRFWLsgUpOGsic
 Accept: application/json
 Content-Type: application/json
 Host: example.org
@@ -239,7 +239,7 @@ Cookie: </pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"amount":77700,"kind":"income","tags_id":[238,239,240,241],"happened_at":"2024-8-23T00:00:00+08:00"}</pre>
+            <pre class="request body">{"amount":77700,"kind":"income","tags_id":[778,779,780,781],"happened_at":"2024-8-23T00:00:00+08:00"}</pre>
 
 
             <h3>Response</h3>
@@ -252,29 +252,29 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;85d1cc8f851be30829996b02d2eb1290&quot;
+ETag: W/&quot;44b69c4fc70a9be2b544b9de8e345558&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: ce5e945b-f4b1-4a9d-a53d-623493fde976
-X-Runtime: 0.006291
+X-Request-Id: 4a3416fc-ffe2-4919-8838-d024b87d7344
+X-Runtime: 0.006111
 Content-Length: 229</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;resource&quot;: {
-    &quot;id&quot;: 119,
-    &quot;user_id&quot;: 187,
+    &quot;id&quot;: 757,
+    &quot;user_id&quot;: 484,
     &quot;amount&quot;: 77700,
     &quot;note&quot;: null,
     &quot;happened_at&quot;: &quot;2024-08-22T16:00:00.000Z&quot;,
     &quot;tags_id&quot;: [
-      238,
-      239,
-      240,
-      241
+      778,
+      779,
+      780,
+      781
     ],
-    &quot;created_at&quot;: &quot;2024-07-23T15:56:40.307Z&quot;,
-    &quot;updated_at&quot;: &quot;2024-07-23T15:56:40.307Z&quot;,
+    &quot;created_at&quot;: &quot;2024-07-24T08:28:31.772Z&quot;,
+    &quot;updated_at&quot;: &quot;2024-07-24T08:28:31.772Z&quot;,
     &quot;kind&quot;: &quot;income&quot;
   }
 }</pre>

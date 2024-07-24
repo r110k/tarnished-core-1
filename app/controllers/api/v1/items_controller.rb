@@ -41,13 +41,14 @@ class Api::V1::ItemsController < ApplicationController
         key = item.happened_at.in_time_zone('Beijing').strftime('%F')
         hash[key] ||= 0
         hash[key] += item.amount
-      else
+      elsif params[:group_by] == 'tag_id'
         item.tags_id.each do |tag_id|
           hash[tag_id] ||= 0
           hash[tag_id] += item.amount
         end
       end
     end
+
     # groups = hash.map { |key, value| { :happened_at: key, amount: value } }
     # # <=> spaceship sign 用 A - B -1 升序 （感叹号是原地自升，不生成新的）
     # groups.sort! { |a, b| a[:happened_at] <=> b[:happened_at] }
