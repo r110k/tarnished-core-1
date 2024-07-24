@@ -13,7 +13,7 @@ RSpec.describe "ValidationCodes", type: :request do
       post '/api/v1/validation_codes', params: { email: '1' }
       expect(response).to have_http_status :unprocessable_entity
       json = JSON.parse(response.body)
-      expect(json['errors']['email'][0]).to eq 'is invalid'
+      expect(json['errors']['email'][0]).to eq '邮箱地址格式不正确'
     end
   end
 end
