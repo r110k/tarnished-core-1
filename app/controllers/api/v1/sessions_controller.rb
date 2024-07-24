@@ -2,15 +2,13 @@ require 'jwt'
 
 class Api::V1::SessionsController < ApplicationController
   def create
-    if Rails.env.test?
-      return render status: :unauthorized, json: { errors: '验证码错误' }  if params[:code] != '926401'
+    session = Session.new params.permit :email, :code
+    if session.valid?
+      user = User.find_or_create_by email: params[:email]
+      render json: { jwt: user.generate_jwt }
     else
-      canSignIn = ValidationCode.exists? email: params[:email], code: params[:code], used_at: nil
-      # https://http.cat/401
-      return render status: :unauthorized, json: { errors: '验证码错误' } unless canSignIn
+      render json: { errors: session.errors }, status: :unprocessable_entity
     end
-    user = User.find_or_create_by email: params[:email]
-    render status: :ok, json: { jwt: user.generate_jwt }
   end
 
   def destroy

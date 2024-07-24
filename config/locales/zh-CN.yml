@@ -8,3 +8,9 @@ zh-CN:
             attributes:
               email:
                 invalid: '邮箱地址格式不正确'
+  activemodel:
+    errors:
+      messages:
+        invalid: '格式非法'
+        blank: '不能为空'
+        not_found: '数据不正确'
