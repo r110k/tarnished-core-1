@@ -12,6 +12,7 @@ class ValidationCode < ApplicationRecord
   end
 
   def send_email
-    UserMailer.welcome_email(self.email).deliver
+    # & 符号如果前面的对象是空，后面的函数将不会被调用
+    UserMailer.welcome_email(self.email)&.deliver
   end
 end

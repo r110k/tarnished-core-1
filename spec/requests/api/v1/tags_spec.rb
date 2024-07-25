@@ -23,6 +23,22 @@ RSpec.describe "Tags", type: :request do
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
     end
+
+    it "登陆后根据 kind 分页获取标签" do
+      user = User.create email: 'judy@civilization.vi'
+      11.times do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", kind: :income, user_id: user.id end
+      11.times do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", kind: :expenses, user_id: user.id end
+
+      get '/api/v1/tags', params: { kind: :income }, headers: user.generate_auth_header
+      expect(response).to have_http_status :ok
+      json = JSON.parse(response.body)
+      expect(json['resources'].size).to eq 10
+
+      get '/api/v1/tags?page=2', params: { kind: :income }, headers: user.generate_auth_header
+      expect(response).to have_http_status :ok
+      json = JSON.parse(response.body)
+      expect(json['resources'].size).to eq 1
+    end
   end
 
   describe "创建标签" do
@@ -45,7 +61,7 @@ RSpec.describe "Tags", type: :request do
       post '/api/v1/tags', params: {sign: "sign_1", user_id: user.id} ,headers: user.generate_auth_header
       expect(response).to have_http_status :unprocessable_entity
       json = JSON.parse(response.body)
-      expect(json['errors']['name'][0]).to eq "can't be blank"
+      expect(json['errors']['name'][0]).to eq "不能为空"
     end
 
     it "登陆后创建标签失败,因为没有填写sign" do
@@ -53,7 +69,7 @@ RSpec.describe "Tags", type: :request do
       post '/api/v1/tags', params: {name: "tag_1", user_id: user.id} ,headers: user.generate_auth_header
       expect(response).to have_http_status :unprocessable_entity
       json = JSON.parse(response.body)
-      expect(json['errors']['sign'][0]).to eq "can't be blank"
+      expect(json['errors']['sign'][0]).to eq "不能为空"
     end
   end
 

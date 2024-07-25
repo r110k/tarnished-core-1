@@ -3,6 +3,7 @@ zh-CN:
     errors:
         messages:
           invalid: '格式不正确'
+          blank: '不能为空'
         models:
           validation_code:
             attributes:

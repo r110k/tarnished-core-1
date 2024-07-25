@@ -109,7 +109,7 @@ table th, table td {
       <h1>账目 API</h1>
 
       <div class="article">
-        <h2>按 tag_id 分组</h2>
+        <h2>统计信息(按 happened_at 分组)</h2>
         <h3>GET /api/v1/items/summary</h3>
 
           <h3>Parameters</h3>
@@ -212,20 +212,20 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0ODYsImV4cCI6MTcyMTgxNjkxMX0.kTbYNbTU9R18e8dFabnxCqwuI6Tzh9rlIr4Fk7xnCmQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo2OSwiZXhwIjoxNzIxOTA3MzEyfQ.1q7uz8Ksh33BI8gJNn0d1t3HZ6to0rOolDbUfHBAl3Y
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/items/summary?happeneded_after=2023-12-31&amp;happeneded_before=2025-1-1&amp;kind=income&amp;group_by=tag_id</pre>
+          <pre class="request route highlight">GET /api/v1/items/summary?happeneded_after=2023-12-31&amp;happeneded_before=2025-1-1&amp;kind=income&amp;group_by=happened_at</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">happeneded_after: 2023-12-31
 happeneded_before: 2025-1-1
 kind: income
-group_by: tag_id</pre>
+group_by: happened_at</pre>
 
 
 
@@ -239,30 +239,30 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;148802dfdc4ce25de712e7b5410adaf1&quot;
+ETag: W/&quot;01c0acdbbf1c6cd1a87484377ef31bab&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: a349abc3-480e-40be-b4f3-2535061480e5
-X-Runtime: 0.004275
-Content-Length: 113</pre>
+X-Request-Id: 2c4cef5a-aaf1-429d-84fa-f542137ea747
+X-Runtime: 0.004742
+Content-Length: 156</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
   &quot;groups&quot;: [
     {
-      &quot;tag_id&quot;: 785,
-      &quot;amount&quot;: 9000
+      &quot;happened_at&quot;: &quot;2024-07-21&quot;,
+      &quot;amount&quot;: 1000
     },
     {
-      &quot;tag_id&quot;: 784,
-      &quot;amount&quot;: 6000
-    },
-    {
-      &quot;tag_id&quot;: 783,
+      &quot;happened_at&quot;: &quot;2024-07-23&quot;,
       &quot;amount&quot;: 5000
+    },
+    {
+      &quot;happened_at&quot;: &quot;2024-07-27&quot;,
+      &quot;amount&quot;: 30000
     }
   ],
-  &quot;total&quot;: 10000
+  &quot;total&quot;: 36000
 }</pre>
       </div>
     </div>
