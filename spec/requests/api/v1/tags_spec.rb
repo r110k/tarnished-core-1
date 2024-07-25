@@ -8,10 +8,10 @@ RSpec.describe "Tags", type: :request do
     end
 
     it "登陆后分页获取标签" do
-      user = User.create email: 'judy@civilization.vi'
-      11.times do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", user_id: user.id end
-      another_user = User.create email: 'tian@civilization.vi'
-      11.times do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", user_id: another_user.id end
+      user = create :user
+      11.times do |i| create :tag, user: user end
+      another_user = create :user
+      11.times do |i| create :tag, user: another_user end
 
       get '/api/v1/tags', headers: user.generate_auth_header
       expect(response).to have_http_status :ok

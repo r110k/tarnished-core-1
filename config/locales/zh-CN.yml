@@ -4,6 +4,7 @@ zh-CN:
         messages:
           invalid: '格式不正确'
           blank: '不能为空'
+          record_invalid: '参数不合法'
         models:
           validation_code:
             attributes:

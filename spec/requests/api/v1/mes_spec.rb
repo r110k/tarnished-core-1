@@ -6,8 +6,8 @@ RSpec.describe "Mes", type: :request do
   describe "当前用户" do
     it "成功登录后能被获取" do
       # 登录
-      user = User.create email: 'Springatom@hotmail.com'
-      post '/api/v1/session', params: { email: 'Springatom@hotmail.com', code: '926401' }
+      user = create :user
+      post '/api/v1/session', params: { email: user.email, code: '926401' }
       data = JSON.parse response.body
       jwt = data['jwt']
 

@@ -8,7 +8,7 @@ RSpec.describe "Items", type: :request do
     end
 
     it "可以创建账目" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag1 = Tag.create name: 'tag1', sign: 'sign1', user_id: user.id
       tag2 = Tag.create name: 'tag2', sign: 'sign2', user_id: user.id
 
@@ -35,20 +35,16 @@ RSpec.describe "Items", type: :request do
 
   describe "获取账目" do
     it "测试不登陆调用分页接口会401" do
-      11.times { Item.create amount: rand(200000) }
-      expect(Item.count).to eq 11
       get '/api/v1/items'
       expect(response).to have_http_status :unauthorized
     end
 
     it "分页" do
-      user1 = User.create email: 'qin@civilization.vi'
-      user2 = User.create email: 'judy@civilization.vi'
-      expect(User.count).to eq 2
+      user1 = create :user
+      user2 = create :user
 
-      11.times { Item.create amount: rand(200000), user_id: user1.id }
-      21.times { Item.create amount: rand(400000), user_id: user2.id }
-      expect(Item.count).to eq 32
+      create_list :item, 11, user: user1, tags_id: [create(:tag, user: user1).id]
+      create_list :item, 21, user: user2, tags_id: [create(:tag, user: user2).id]
 
       get '/api/v1/items', headers: user1.generate_auth_header
       expect(response).to have_http_status 200
