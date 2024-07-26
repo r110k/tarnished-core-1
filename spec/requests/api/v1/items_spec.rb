@@ -9,8 +9,8 @@ RSpec.describe "Items", type: :request do
 
     it "可以创建账目" do
       user = create :user
-      tag1 = Tag.create name: 'tag1', sign: 'sign1', user_id: user.id
-      tag2 = Tag.create name: 'tag2', sign: 'sign2', user_id: user.id
+      tag1 = create :tag, user: user
+      tag2 = create :tag, user: user
 
       post '/api/v1/items', params: { amount: "888", tag_ids: [tag1.id, tag2.id], happened_at: '2024-7-23T00:00:00+08:00' } ,headers: user.generate_auth_header
       expect(response).to have_http_status :ok
@@ -116,7 +116,7 @@ RSpec.describe "Items", type: :request do
   describe "统计" do
     it "按天分组" do
       user = create :user
-      tag = Tag.create name: "tag1", sign: "sign1", user_id: user.id
+      tag = create :tag, user: user
 
       # 7-21: 10
       Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
@@ -163,9 +163,9 @@ RSpec.describe "Items", type: :request do
 
      it "按标签分组" do
       user = create :user
-      tag1 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
-      tag2 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
-      tag3 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
+      tag1 = create :tag, user: user
+      tag2 = create :tag, user: user
+      tag3 = create :tag, user: user
 
       # tag1: 50
       Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',

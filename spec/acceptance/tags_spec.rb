@@ -19,7 +19,7 @@ resource "标签" do
     end
    
     example "分页获取标签列表" do
-      11.times do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", user_id: current_user.id end
+      11.times do |i| create :tag, user: current_user end
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
@@ -53,7 +53,7 @@ resource "标签" do
   end
 
   patch '/api/v1/tags/:id' do
-    let(:tag) { Tag.create name: 'tag_1', sign: 'sign_1', user_id: current_user.id }
+    let(:tag) { create :tag, user: current_user }
     let(:id) { tag.id }
 
     parameter :name, '名称'
@@ -81,7 +81,7 @@ resource "标签" do
   end
 
   delete '/api/v1/tags/:id' do
-    let(:tag) { Tag.create name: 'tag_1', sign: 'sign_1', user_id: current_user.id }
+    let(:tag) { create :tag, user: current_user }
     let(:id) { tag.id }
 
     example "删除标签" do
@@ -91,7 +91,7 @@ resource "标签" do
   end
 
   get '/api/v1/tags/:id' do
-    let(:tag) { Tag.create name: 'tag_1', sign: 'sign_1', user_id: current_user.id }
+    let(:tag) { create :tag, user: current_user }
     let(:id) { tag.id }
 
     with_options :scope => :resources do

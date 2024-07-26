@@ -5,7 +5,7 @@ resource "账目" do
   authentication :basic, :auth
   let(:current_user) { create :user }
   let(:auth) { "Bearer #{current_user.generate_jwt}" }
-  let (:tags) { (0..3).map do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", user_id: current_user.id end }
+  let (:tags) { (0..3).map do |i| create :tag, user: current_user end }
   # &:id 等价于 当前的 id
   let (:tag_ids) { tags.map(&:id) }
 
@@ -88,7 +88,7 @@ resource "账目" do
     example "统计信息(按 happened_at 分组)" do
 
       user = current_user
-      tag = Tag.create name: "tag1", sign: "sign1", user_id: user.id
+      tag = create :tag, user: user
 
       # 7-21: 10
       Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
@@ -130,9 +130,9 @@ resource "账目" do
 
       user = current_user
 
-      tag1 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
-      tag2 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
-      tag3 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
+      tag1 = create :tag, user: user
+      tag2 = create :tag, user: user
+      tag3 = create :tag, user: user
 
       # tag1: 50
       Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
