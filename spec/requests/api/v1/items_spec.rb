@@ -26,9 +26,9 @@ RSpec.describe "Items", type: :request do
       post '/api/v1/items', params: {} ,headers: user.generate_auth_header
       expect(response).to have_http_status :unprocessable_entity
       json = JSON.parse(response.body)
-      expect(json['errors']['amount'][0]).to eq "can't be blank"
-      expect(json['errors']['tag_ids'][0]).to eq "can't be blank"
-      expect(json['errors']['happened_at'][0]).to eq "can't be blank"
+      expect(json['errors']['amount'][0]).to eq "不能为空"
+      expect(json['errors']['tag_ids'][0]).to eq "不能为空"
+      expect(json['errors']['happened_at'][0]).to eq "不能为空"
     end
 
   end
@@ -58,12 +58,12 @@ RSpec.describe "Items", type: :request do
     end
 
     it "按时间筛选" do
-      user = create :user
-      item1 = Item.create amount: 200000, created_at: '1991-1-2', user_id: user.id
-      item2 = Item.create amount: 200000, created_at: '1991-1-2', user_id: user.id
-      item3 = Item.create amount: 10000, created_at: '1992-1-1', user_id: user.id
+      tag = create :tag
+      item1 = create :item, created_at: '1991-1-1', tag_ids: [tag.id], user_id: tag.user.id
+      item2 = create :item, created_at: '1991-1-2', tag_ids: [tag.id], user_id: tag.user.id
+      item3 = create :item, created_at: '1992-1-1', tag_ids: [tag.id], user_id: tag.user.id
 
-      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-3', headers: user.generate_auth_header
+      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-3', headers: tag.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 2
@@ -72,27 +72,27 @@ RSpec.describe "Items", type: :request do
     end
 
     it "按时间筛选(边界条件)" do
-      user = create :user
       # 这里(Time.new)默认使用了 +8 时区，会导致标准时区时间仍然在 1990-12-31 日，所以测试不通过
       # item1 = Item.create amount: 200000, created_at: Time.new(1991, 1, 1) 
       # 解决方案1, 指定标准时区（"+00:00" <=> "Z")
       # item1 = Item.create amount: 200000, created_at: Time.new(1991, 1, 1, 0, 0, 0, "Z") 
       # 解决方案2, 统一使用一个时区，使用字符串
-      item1 = Item.create amount: 200000, created_at: '1991-01-01', user_id: user.id
+      tag = create :tag
+      item = create :item, created_at: '1991-1-1', tag_ids: [tag.id], user_id: tag.user.id
 
-      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-2', headers: user.generate_auth_header
+      get '/api/v1/items?created_after=1991-01-01&created_before=1991-1-2', headers: tag.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
-      expect(json['resources'][0]['id']).to eq item1.id
+      expect(json['resources'][0]['id']).to eq item.id
     end
 
     it "按时间筛选测试只传开始时间" do
-      user = create :user
-      item1 = Item.create amount: 200000, created_at: '1991-01-01', user_id: user.id
-      item2 = Item.create amount: 200000, created_at: '1990-01-01', user_id: user.id
+      tag = create :tag
+      item1 = create :item, created_at: '1991-1-1', tag_ids: [tag.id], user_id: tag.user.id
+      item2 = create :item, created_at: '1990-1-1', tag_ids: [tag.id], user_id: tag.user.id
 
-      get '/api/v1/items?created_after=1991-01-01', headers: user.generate_auth_header
+      get '/api/v1/items?created_after=1991-01-01', headers: tag.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
@@ -100,11 +100,11 @@ RSpec.describe "Items", type: :request do
     end
 
     it "按时间筛选测试只传结束时间" do
-      user = create :user
-      item1 = Item.create amount: 200000, created_at: '1991-01-01', user_id: user.id
-      item2 = Item.create amount: 200000, created_at: '1991-01-02', user_id: user.id
+      tag = create :tag
+      item1 = create :item, created_at: '1991-1-1', tag_ids: [tag.id], user_id: tag.user.id
+      item2 = create :item, created_at: '1991-1-2', tag_ids: [tag.id], user_id: tag.user.id
 
-      get '/api/v1/items?created_before=1991-01-01', headers: user.generate_auth_header
+      get '/api/v1/items?created_before=1991-01-01', headers: tag.user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
@@ -115,40 +115,30 @@ RSpec.describe "Items", type: :request do
 
   describe "统计" do
     it "按天分组" do
-      user = create :user
-      tag = create :tag, user: user
+      current_user = create :user
+      tag = create :tag, user: current_user
 
       # 7-21: 10
-      Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
+      create :item, amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
 
       # 7-27 300
-      Item.create! amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 6000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 7000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 8000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
+      create :item, amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 6000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 7000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 8000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
 
       # 7-23 50
-      Item.create! amount: 2000, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-
+      create :item, amount: 2000, kind: :income, happened_at: '2024-7-23T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
 
       get '/api/v1/items/summary', params: {
         happened_after: '2023-12-31',
         happened_before: '2025-1-1',
         kind: :income,
         group_by: :happened_at,
-      }, headers: user.generate_auth_header
+      }, headers: current_user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['groups'].size).to eq 3
@@ -161,28 +151,19 @@ RSpec.describe "Items", type: :request do
       expect(json['groups'][2]['amount']).to eq 30000
     end
 
-     it "按标签分组" do
+    it "按标签分组" do
       user = create :user
+      current_user = user
       tag1 = create :tag, user: user
       tag2 = create :tag, user: user
       tag3 = create :tag, user: user
-
       # tag1: 50
-      Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag1.id, tag2.id]
+      create :item, amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag1.id, tag2.id]
       # tag2: 60
-      Item.create! amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag1.id, tag3.id]
+      create :item, amount: 4000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag1.id, tag3.id]
       # tag3: 90
-      Item.create! amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag2.id, tag3.id]
-     
-      get '/api/v1/items/summary', params: {
-        happened_after: '2023-12-31',
-        happened_before: '2025-1-1',
-        kind: :income,
-        group_by: :tag_id,
-      }, headers: user.generate_auth_header
+      create :item, amount: 5000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag2.id, tag3.id]
+      get '/api/v1/items/summary', params: { happened_after: '2023-12-31', happened_before: '2025-1-1', kind: :income, group_by: :tag_id, }, headers: user.generate_auth_header
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['groups'].size).to eq 3

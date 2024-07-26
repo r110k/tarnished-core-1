@@ -24,12 +24,7 @@ resource "账目" do
     let(:created_after) { '2019-12-31' }
     let(:created_before) { '2022-11-16' }
     example "获取账目" do
-      # create! 感叹号会让 create 抛出错误，否则默认会吞掉报错
-      11.times do 
-        Item.create! amount: rand(20000), created_at: '2020-1-1', user_id: current_user.id,
-          kind: :income, happened_at: '2024-8-23T00:00:00+08:00', tag_ids: tag_ids
-      end
-
+      items = create_list :item, 11, user: current_user, tag_ids: tag_ids, created_at: '2020-1-1'
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
@@ -86,33 +81,22 @@ resource "账目" do
     let(:happeneded_before) { '2025-1-1' }
     let(:kind) { 'income' }
     example "统计信息(按 happened_at 分组)" do
-
-      user = current_user
-      tag = create :tag, user: user
+      tag = create :tag, user: current_user
 
       # 7-21: 10
-      Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
+      create :item, amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
 
       # 7-27 300
-      Item.create! amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 6000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 7000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 8000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
+      create :item, amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 6000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 7000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 8000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
 
       # 7-23 50
-      Item.create! amount: 2000, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
-      Item.create! amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
+      create :item, amount: 2000, kind: :income, happened_at: '2024-7-23T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
+      create :item, amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag.id]
 
       do_request group_by: 'happened_at'
       expect(status).to eq 200
@@ -135,14 +119,11 @@ resource "账目" do
       tag3 = create :tag, user: user
 
       # tag1: 50
-      Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag1.id, tag2.id]
+      create :item, amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag1.id, tag2.id]
       # tag2: 60
-      Item.create! amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag1.id, tag3.id]
+      create :item, amount: 4000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag1.id, tag3.id]
       # tag3: 90
-      Item.create! amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag2.id, tag3.id]
+      create :item, amount: 5000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00', created_at: '2025-1-1', user: current_user, tag_ids: [tag2.id, tag3.id]
 
       do_request group_by: 'tag_id'
       expect(status).to eq 200
