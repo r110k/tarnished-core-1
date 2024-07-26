@@ -12,7 +12,7 @@ RSpec.describe "Items", type: :request do
       tag1 = Tag.create name: 'tag1', sign: 'sign1', user_id: user.id
       tag2 = Tag.create name: 'tag2', sign: 'sign2', user_id: user.id
 
-      post '/api/v1/items', params: { amount: "888", tags_id: [tag1.id, tag2.id], happened_at: '2024-7-23T00:00:00+08:00' } ,headers: user.generate_auth_header
+      post '/api/v1/items', params: { amount: "888", tag_ids: [tag1.id, tag2.id], happened_at: '2024-7-23T00:00:00+08:00' } ,headers: user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
       expect(json['resource']['id']).to be_an Numeric
@@ -21,13 +21,13 @@ RSpec.describe "Items", type: :request do
       expect(json['resource']['happened_at']).to eq '2024-07-22T16:00:00.000Z'
     end
 
-    it "创建账目时 amount、tags_id 必填" do
+    it "创建账目时 amount、tag_ids 必填" do
       user = User.create email: 'judy@civilization.vi'
       post '/api/v1/items', params: {} ,headers: user.generate_auth_header
       expect(response).to have_http_status :unprocessable_entity
       json = JSON.parse(response.body)
       expect(json['errors']['amount'][0]).to eq "can't be blank"
-      expect(json['errors']['tags_id'][0]).to eq "can't be blank"
+      expect(json['errors']['tag_ids'][0]).to eq "can't be blank"
       expect(json['errors']['happened_at'][0]).to eq "can't be blank"
     end
 
@@ -43,8 +43,8 @@ RSpec.describe "Items", type: :request do
       user1 = create :user
       user2 = create :user
 
-      create_list :item, 11, user: user1, tags_id: [create(:tag, user: user1).id]
-      create_list :item, 21, user: user2, tags_id: [create(:tag, user: user2).id]
+      create_list :item, 11, user: user1, tag_ids: [create(:tag, user: user1).id]
+      create_list :item, 21, user: user2, tag_ids: [create(:tag, user: user2).id]
 
       get '/api/v1/items', headers: user1.generate_auth_header
       expect(response).to have_http_status 200
@@ -120,27 +120,27 @@ RSpec.describe "Items", type: :request do
 
       # 7-21: 10
       Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
 
       # 7-27 300
       Item.create! amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
       Item.create! amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
       Item.create! amount: 6000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
       Item.create! amount: 7000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
       Item.create! amount: 8000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
 
       # 7-23 50
       Item.create! amount: 2000, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
       Item.create! amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
       Item.create! amount: 1500, kind: :income, happened_at: '2024-7-23T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag.id]
 
 
       get '/api/v1/items/summary', params: {
@@ -169,13 +169,13 @@ RSpec.describe "Items", type: :request do
 
       # tag1: 50
       Item.create! amount: 1000, kind: :income, happened_at: '2024-7-21T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag1.id, tag2.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag1.id, tag2.id]
       # tag2: 60
       Item.create! amount: 4000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag1.id, tag3.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag1.id, tag3.id]
       # tag3: 90
       Item.create! amount: 5000, kind: :income, happened_at: '2024-7-27T00:00:00+08:00',
-          created_at: '2025-1-1', user_id: user.id, tags_id: [tag2.id, tag3.id]
+          created_at: '2025-1-1', user_id: user.id, tag_ids: [tag2.id, tag3.id]
      
       get '/api/v1/items/summary', params: {
         happened_after: '2023-12-31',
