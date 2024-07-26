@@ -20,7 +20,7 @@ RSpec.describe "Mes", type: :request do
 
     it "jwt可以过期" do
       travel_to Time.now - 3.hours
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       jwt = user.generate_jwt
 
       travel_back
@@ -30,7 +30,7 @@ RSpec.describe "Mes", type: :request do
 
     it "jwt没过期" do
       travel_to Time.now - 1.hours
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       jwt = user.generate_jwt
 
       travel_back

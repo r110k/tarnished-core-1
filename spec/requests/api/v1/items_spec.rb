@@ -22,7 +22,7 @@ RSpec.describe "Items", type: :request do
     end
 
     it "创建账目时 amount、tag_ids 必填" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       post '/api/v1/items', params: {} ,headers: user.generate_auth_header
       expect(response).to have_http_status :unprocessable_entity
       json = JSON.parse(response.body)
@@ -58,7 +58,7 @@ RSpec.describe "Items", type: :request do
     end
 
     it "按时间筛选" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       item1 = Item.create amount: 200000, created_at: '1991-1-2', user_id: user.id
       item2 = Item.create amount: 200000, created_at: '1991-1-2', user_id: user.id
       item3 = Item.create amount: 10000, created_at: '1992-1-1', user_id: user.id
@@ -72,7 +72,7 @@ RSpec.describe "Items", type: :request do
     end
 
     it "按时间筛选(边界条件)" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       # 这里(Time.new)默认使用了 +8 时区，会导致标准时区时间仍然在 1990-12-31 日，所以测试不通过
       # item1 = Item.create amount: 200000, created_at: Time.new(1991, 1, 1) 
       # 解决方案1, 指定标准时区（"+00:00" <=> "Z")
@@ -88,7 +88,7 @@ RSpec.describe "Items", type: :request do
     end
 
     it "按时间筛选测试只传开始时间" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       item1 = Item.create amount: 200000, created_at: '1991-01-01', user_id: user.id
       item2 = Item.create amount: 200000, created_at: '1990-01-01', user_id: user.id
 
@@ -100,7 +100,7 @@ RSpec.describe "Items", type: :request do
     end
 
     it "按时间筛选测试只传结束时间" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       item1 = Item.create amount: 200000, created_at: '1991-01-01', user_id: user.id
       item2 = Item.create amount: 200000, created_at: '1991-01-02', user_id: user.id
 
@@ -115,7 +115,7 @@ RSpec.describe "Items", type: :request do
 
   describe "统计" do
     it "按天分组" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag = Tag.create name: "tag1", sign: "sign1", user_id: user.id
 
       # 7-21: 10
@@ -162,7 +162,7 @@ RSpec.describe "Items", type: :request do
     end
 
      it "按标签分组" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag1 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
       tag2 = Tag.create name: "tag1", sign: "sign1", user_id: user.id
       tag3 = Tag.create name: "tag1", sign: "sign1", user_id: user.id

@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource "账目" do
   authentication :basic, :auth
-  let(:current_user) { User.create email: 'judy@civilization.vi' }
+  let(:current_user) { create :user }
   let(:auth) { "Bearer #{current_user.generate_jwt}" }
   let (:tags) { (0..3).map do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", user_id: current_user.id end }
   # &:id 等价于 当前的 id

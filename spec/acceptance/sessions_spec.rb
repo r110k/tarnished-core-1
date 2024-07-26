@@ -12,9 +12,6 @@ resource "会话" do
     let(:code) { '926401' }
 
     example "登录" do
-      User.create email: email
-      expect(User.count).to eq 1
-
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body

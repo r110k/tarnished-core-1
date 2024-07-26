@@ -25,7 +25,7 @@ RSpec.describe "Tags", type: :request do
     end
 
     it "登陆后根据 kind 分页获取标签" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       11.times do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", kind: :income, user_id: user.id end
       11.times do |i| Tag.create name: "tag#{i}", sign: "sign#{i}", kind: :expenses, user_id: user.id end
 
@@ -48,7 +48,7 @@ RSpec.describe "Tags", type: :request do
     end
 
     it "登陆后创建标签" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       post '/api/v1/tags', params: {name: "tag_1", sign: "sign_1", user_id: user.id} ,headers: user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
@@ -57,7 +57,7 @@ RSpec.describe "Tags", type: :request do
     end
 
     it "登陆后创建标签失败,因为没有填写name" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       post '/api/v1/tags', params: {sign: "sign_1", user_id: user.id} ,headers: user.generate_auth_header
       expect(response).to have_http_status :unprocessable_entity
       json = JSON.parse(response.body)
@@ -65,7 +65,7 @@ RSpec.describe "Tags", type: :request do
     end
 
     it "登陆后创建标签失败,因为没有填写sign" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       post '/api/v1/tags', params: {name: "tag_1", user_id: user.id} ,headers: user.generate_auth_header
       expect(response).to have_http_status :unprocessable_entity
       json = JSON.parse(response.body)
@@ -75,14 +75,14 @@ RSpec.describe "Tags", type: :request do
 
   describe "修改标签" do
     it "测试不登陆修改标签接口会401" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: user.id 
       patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: user.id}
       expect(response).to have_http_status :unauthorized
     end
 
     it "登陆后修改标签" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag = Tag.create name: "tag_2", sign: "sign_1", user_id: user.id
       patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: 'yyy'}, headers: user.generate_auth_header
       expect(response).to have_http_status :ok
@@ -93,7 +93,7 @@ RSpec.describe "Tags", type: :request do
     end
 
     it "登陆后部分修改标签" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag = Tag.create name: "tag_2", sign: "sign_1", user_id: user.id
       patch "/api/v1/tags/#{tag.id}", params: { name: "tag_so" }, headers: user.generate_auth_header
       expect(response).to have_http_status :ok
@@ -106,14 +106,14 @@ RSpec.describe "Tags", type: :request do
 
   describe "删除标签" do
     it "测试不登陆删除标签接口会401" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: user.id 
       delete "/api/v1/tags/#{tag.id}"
       expect(response).to have_http_status :unauthorized
     end
 
     it "登陆后删除标签" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag = Tag.create name: "tag_2", sign: "sign_1", user_id: user.id
       delete "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
       expect(response).to have_http_status :ok
@@ -123,8 +123,8 @@ RSpec.describe "Tags", type: :request do
     end
 
     it "登陆后删除别人的标签" do
-      user = User.create email: 'judy@civilization.vi'
-      another_user = User.create email: 'tian@civilization.vi'
+      user = create :user
+      another_user = create :user
       tag = Tag.create name: "tag_2", sign: "sign_1", user_id: another_user.id
       delete "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
       expect(response).to have_http_status :forbidden
@@ -136,14 +136,14 @@ RSpec.describe "Tags", type: :request do
 
    describe "获取单个标签" do
     it "测试不登陆获取标签接口会401" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: user.id 
       get "/api/v1/tags/#{tag.id}"
       expect(response).to have_http_status :unauthorized
     end
 
     it "登陆后获取单个标签" do
-      user = User.create email: 'judy@civilization.vi'
+      user = create :user
       tag = Tag.create  name: "tag_1", sign: "sign_1", user_id: user.id 
 
       get "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
@@ -155,8 +155,8 @@ RSpec.describe "Tags", type: :request do
     end
 
      it "登陆后不能获取别人的单个标签" do
-      user = User.create email: 'judy@civilization.vi'
-      another_user = User.create email: 'tian@civilization.vi'
+      user = create :user
+      another_user = create :user
       tag = Tag.create  name: "tag_2", sign: "sign_1", user_id: another_user.id 
 
       get "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
