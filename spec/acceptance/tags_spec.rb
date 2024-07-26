@@ -19,11 +19,11 @@ resource "标签" do
     end
    
     example "分页获取标签列表" do
-      11.times do |i| create :tag, user: current_user end
+      (Tag.default_per_page + 1).times do |i| create :tag, user: current_user end
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
-      expect(json['resources'].size).to eq 10
+      expect(json['resources'].size).to eq Tag.default_per_page
     end
 
   end

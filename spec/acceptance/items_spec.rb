@@ -24,12 +24,12 @@ resource "账目" do
     let(:created_after) { '2019-12-31' }
     let(:created_before) { '2022-11-16' }
     example "获取账目" do
-      items = create_list :item, 11, user: current_user, tag_ids: tag_ids, created_at: '2020-1-1'
+      items = create_list :item, Item.default_per_page + 1, user: current_user, tag_ids: tag_ids, created_at: '2020-1-1'
       do_request
       expect(status).to eq 200
       json = JSON.parse response_body
-      expect(json['resources'].size).to eq 10
-      expect(json['pager']['total']).to eq 11
+      expect(json['resources'].size).to eq Item.default_per_page
+      expect(json['pager']['total']).to eq Item.default_per_page + 1
     end
 
   end

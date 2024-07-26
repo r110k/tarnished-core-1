@@ -10,13 +10,13 @@ RSpec.describe "Tags", type: :request do
     it "登陆后分页获取标签" do
       user = create :user
       another_user = create :user
-      create_list :tag, 11, user: user
-      create_list :tag, 11, user: another_user
+      create_list :tag, Tag.default_per_page + 1, user: user
+      create_list :tag, Tag.default_per_page + 1, user: another_user
 
       get '/api/v1/tags', headers: user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
-      expect(json['resources'].size).to eq 10
+      expect(json['resources'].size).to eq Tag.default_per_page
 
       get '/api/v1/tags?page=2', headers: user.generate_auth_header
       expect(response).to have_http_status :ok
@@ -26,13 +26,13 @@ RSpec.describe "Tags", type: :request do
 
     it "登陆后根据 kind 分页获取标签" do
       user = create :user
-      create_list :tag, 11, kind: :income, user: user
-      create_list :tag, 11, kind: :expenses, user: user
+      create_list :tag, Tag.default_per_page + 1, kind: :income, user: user
+      create_list :tag, Tag.default_per_page + 1, kind: :expenses, user: user
 
       get '/api/v1/tags', params: { kind: :income }, headers: user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
-      expect(json['resources'].size).to eq 10
+      expect(json['resources'].size).to eq Tag.default_per_page
 
       get '/api/v1/tags?page=2', params: { kind: :income }, headers: user.generate_auth_header
       expect(response).to have_http_status :ok

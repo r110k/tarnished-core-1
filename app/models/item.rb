@@ -1,6 +1,7 @@
 class Item < ApplicationRecord
   belongs_to :user
   enum kind: { income: 1, expenses: 0 }
+  paginates_per 25
 
   validates :amount, presence: true
   validates :kind, presence: true
