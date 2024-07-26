@@ -9,9 +9,9 @@ RSpec.describe "Tags", type: :request do
 
     it "登陆后分页获取标签" do
       user = create :user
-      11.times do |i| create :tag, user: user end
       another_user = create :user
-      11.times do |i| create :tag, user: another_user end
+      create_list :tag, 11, user: user
+      create_list :tag, 11, user: another_user
 
       get '/api/v1/tags', headers: user.generate_auth_header
       expect(response).to have_http_status :ok
@@ -26,8 +26,8 @@ RSpec.describe "Tags", type: :request do
 
     it "登陆后根据 kind 分页获取标签" do
       user = create :user
-      11.times do |i| create :tag, kind: :income, user: user
-      11.times do |i| create :tag, kind: :expenses, user: user
+      create_list :tag, 11, kind: :income, user: user
+      create_list :tag, 11, kind: :expenses, user: user
 
       get '/api/v1/tags', params: { kind: :income }, headers: user.generate_auth_header
       expect(response).to have_http_status :ok
@@ -75,47 +75,42 @@ RSpec.describe "Tags", type: :request do
 
   describe "修改标签" do
     it "测试不登陆修改标签接口会401" do
-      user = create :user
-      tag = create :tag, user: user
-      patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: user.id}
+      tag = create :tag
+      patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: tag.user.id}
       expect(response).to have_http_status :unauthorized
     end
 
     it "登陆后修改标签" do
-      user = create :user
-      tag = create :tag, user: user
-      patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: 'yyy'}, headers: user.generate_auth_header
+      tag = create :tag
+      patch "/api/v1/tags/#{tag.id}", params: { id: tag.id, name: "tag_so", sign: "sign_soso", user_id: 'yyy'}, headers: tag.user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
       expect(json['resource']['name']).to eq 'tag_so'
       expect(json['resource']['sign']).to eq 'sign_soso'
-      expect(json['resource']['user_id']).to eq user.id
+      expect(json['resource']['user_id']).to eq tag.user.id
     end
 
     it "登陆后部分修改标签" do
-      user = create :user
-      tag = create :tag, user: user
-      patch "/api/v1/tags/#{tag.id}", params: { name: "tag_so" }, headers: user.generate_auth_header
+      tag = create :tag
+      patch "/api/v1/tags/#{tag.id}", params: { name: "tag_so" }, headers: tag.user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
       expect(json['resource']['name']).to eq 'tag_so'
-      expect(json['resource']['sign']).to eq 'sign_1'
-      expect(json['resource']['user_id']).to eq user.id
+      expect(json['resource']['sign']).to eq tag.sign
+      expect(json['resource']['user_id']).to eq tag.user.id
     end
   end
 
   describe "删除标签" do
     it "测试不登陆删除标签接口会401" do
-      user = create :user
-      tag = create :tag, user: user
+      tag = create :tag
       delete "/api/v1/tags/#{tag.id}"
       expect(response).to have_http_status :unauthorized
     end
 
     it "登陆后删除标签" do
-      user = create :user
-      tag = create :tag, user: user
-      delete "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
+      tag = create :tag
+      delete "/api/v1/tags/#{tag.id}", headers: tag.user.generate_auth_header
       expect(response).to have_http_status :ok
       # tag.reload 等价于重新查一遍数据库 tag = Tag.find tag.id
       tag.reload
@@ -124,40 +119,34 @@ RSpec.describe "Tags", type: :request do
 
     it "登陆后删除别人的标签" do
       user = create :user
-      another_user = create :user
-      tag = create :tag, user: another_user
+      tag = create :tag
       delete "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
       expect(response).to have_http_status :forbidden
-      # tag.reload 等价于重新查一遍数据库 tag = Tag.find tag.id
       tag.reload
       expect(tag.deleted_at).to eq nil
     end
   end
 
-   describe "获取单个标签" do
+  describe "获取单个标签" do
     it "测试不登陆获取标签接口会401" do
-      user = create :user
-      tag = create :tag, user: user
+      tag = create :tag
       get "/api/v1/tags/#{tag.id}"
       expect(response).to have_http_status :unauthorized
     end
 
     it "登陆后获取单个标签" do
-      user = create :user
-      tag = create :tag, user: user
-
-      get "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
+      tag = create :tag
+      get "/api/v1/tags/#{tag.id}", headers: tag.user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
-      expect(json['resource']['name']).to eq 'tag_1'
-      expect(json['resource']['sign']).to eq 'sign_1'
-      expect(json['resource']['user_id']).to eq user.id
+      expect(json['resource']['name']).to eq tag.name
+      expect(json['resource']['sign']).to eq tag.sign
+      expect(json['resource']['user_id']).to eq tag.user.id
     end
 
-     it "登陆后不能获取别人的单个标签" do
+    it "登陆后不能获取别人的单个标签" do
       user = create :user
-      another_user = create :user
-      tag = create :tag, user: another_user
+      tag = create :tag
 
       get "/api/v1/tags/#{tag.id}", headers: user.generate_auth_header
       expect(response).to have_http_status :forbidden
