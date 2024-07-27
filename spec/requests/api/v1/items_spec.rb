@@ -176,4 +176,36 @@ RSpec.describe "Items", type: :request do
       expect(json['groups'][2]['amount']).to eq 5000
     end
   end
+
+  describe "余额" do
+    it "可以获取余额" do
+      user = create :user
+      # income 3550000 expenses 1000000
+      create :item, amount: 3500000, kind: :income, happened_at: '2024-7-1T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-2T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-3T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-4T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-5T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-6T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-7T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-8T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-9T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-10T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-11T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-12T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-13T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-14T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-15T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-16T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-17T00:00:00+08:00', user: user
+      create :item, amount: 100000, kind: :expenses, happened_at: '2024-7-19T00:00:00+08:00', user: user
+      create :item, amount: 50000, kind: :income, happened_at: '2024-7-20T00:00:00+08:00', user: user
+      get '/api/v1/items/balance', params: { happened_after: '2024-6-29', happened_before: '2024-7-22'}, headers: user.generate_auth_header
+      expect(response).to have_http_status 200
+      json = JSON.parse(response.body)
+      expect(json['income']).to eq 3550000
+      expect(json['expenses']).to eq 1000000
+      expect(json['balance']).to eq 2550000
+    end
+  end
 end

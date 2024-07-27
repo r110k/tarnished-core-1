@@ -109,8 +109,8 @@ table th, table td {
       <h1>账目 API</h1>
 
       <div class="article">
-        <h2>创建账目</h2>
-        <h3>POST /api/v1/items</h3>
+        <h2>获取支出、收入、余额</h2>
+        <h3>GET /api/v1/items/balance</h3>
 
           <h3>Parameters</h3>
           <table class="parameters table table-striped table-bordered table-condensed">
@@ -123,34 +123,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">amount</span>
+                    <span class="name">happeneded_after</span>
                 </td>
                 <td>
-                  <span class="description">金额（单位：分）</span>
+                  <span class="description">时间起点</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">kind</span>
+                    <span class="name">happeneded_before</span>
                 </td>
                 <td>
-                  <span class="description">类型</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">tag_ids</span>
-                </td>
-                <td>
-                  <span class="description">发生时间</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">happened_at</span>
-                </td>
-                <td>
-                  <span class="description">标签列表（只传id）</span>
+                  <span class="description">时间终点</span>
                 </td>
               </tr>
             </tbody>
@@ -167,58 +151,26 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">resources[id]</span>
+                    <span class="name">income</span>
                 </td>
                 <td>
-                  <span class="description">ID</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[amount]</span>
-                </td>
-                <td>
-                  <span class="description">金额（单位：分）</span>
+                  <span class="description">收入</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">resources[kind]</span>
+                    <span class="name">expenses</span>
                 </td>
                 <td>
-                  <span class="description">类型</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[happened_at]</span>
-                </td>
-                <td>
-                  <span class="description">发生时间</span>
+                  <span class="description">支出</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">resources[tag_ids]</span>
+                    <span class="name">balance</span>
                 </td>
                 <td>
-                  <span class="description">标签列表（只传id）</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[user_id]</span>
-                </td>
-                <td>
-                  <span class="description">用户 ID</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">resources[deleted_at]</span>
-                </td>
-                <td>
-                  <span class="description">删除时间</span>
+                  <span class="description">余额</span>
                 </td>
               </tr>
             </tbody>
@@ -228,18 +180,19 @@ table th, table td {
 
             <h4>Headers</h4>
             <pre class="request headers">Version: HTTP/1.0
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNzE3LCJleHAiOjE3MjIwNTM4OTV9.Y0Ll8D3eYZEVicT63rEVRsPiAuKlgkrgSXO3nZ7MlbM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNzIwLCJleHAiOjE3MjIwNTM4OTZ9.caRmJ0nC98aAa0rLEhn7Mxp_NtfFjlpcJiLavy9_Tlw
 Accept: application/json
 Content-Type: application/json
 Host: example.org
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/items</pre>
+          <pre class="request route highlight">GET /api/v1/items/balance?happeneded_after=2024-6-29&amp;happeneded_before=2024-7-22</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">happeneded_after: 2024-6-29
+happeneded_before: 2024-7-22</pre>
 
-            <h4>Body</h4>
-            <pre class="request body">{"amount":77700,"kind":"income","tag_ids":[5805,5806,5807,5808],"happened_at":"2024-8-23T00:00:00+08:00"}</pre>
 
 
             <h3>Response</h3>
@@ -252,31 +205,18 @@ X-Permitted-Cross-Domain-Policies: none
 Referrer-Policy: strict-origin-when-cross-origin
 Content-Type: application/json; charset=utf-8
 Vary: Accept
-ETag: W/&quot;ecc9ef2e64f59f85e2f134220a1fc40e&quot;
+ETag: W/&quot;e397fe1363ffe0b38b4ef3345e2d3fc1&quot;
 Cache-Control: max-age=0, private, must-revalidate
-X-Request-Id: 468d50ff-6d9b-4dee-b7d9-3d7ec50924a7
-X-Runtime: 0.010075
-Content-Length: 235</pre>
+X-Request-Id: 32393e4d-6d5f-4b5f-b594-ed1395b189b0
+X-Runtime: 0.003026
+Content-Length: 55</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;resource&quot;: {
-    &quot;id&quot;: 4332,
-    &quot;user_id&quot;: 1717,
-    &quot;amount&quot;: 77700,
-    &quot;note&quot;: null,
-    &quot;happened_at&quot;: &quot;2024-08-22T16:00:00.000Z&quot;,
-    &quot;tag_ids&quot;: [
-      5805,
-      5806,
-      5807,
-      5808
-    ],
-    &quot;created_at&quot;: &quot;2024-07-27T02:18:15.887Z&quot;,
-    &quot;updated_at&quot;: &quot;2024-07-27T02:18:15.887Z&quot;,
-    &quot;kind&quot;: &quot;income&quot;
-  }
+  &quot;income&quot;: 3550000,
+  &quot;expenses&quot;: 1000000,
+  &quot;balance&quot;: 2550000
 }</pre>
       </div>
     </div>

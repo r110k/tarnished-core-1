@@ -62,7 +62,7 @@ resource "账目" do
     end
   end
 
-   get '/api/v1/items/summary' do
+  get '/api/v1/items/summary' do
     parameter :happeneded_after, '时间起点', required: true
     parameter :happeneded_before, '时间终点', required: true
     parameter :kind, '账目类型', enum: ['expensive', 'income'], required: true
@@ -137,5 +137,47 @@ resource "账目" do
       expect(json['groups'][2]['tag_id']).to eq tag1.id
       expect(json['groups'][2]['amount']).to eq 5000
     end
+  end
+
+  get '/api/v1/items/balance' do
+    parameter :happeneded_after, '时间起点', required: true
+    parameter :happeneded_before, '时间终点', required: true
+
+    response_field :income, '收入'
+    response_field :expenses, '支出'
+    response_field :balance, '余额'
+
+    let(:happeneded_after) { '2024-6-29' }
+    let(:happeneded_before) { '2024-7-22' }
+    example "获取支出、收入、余额" do
+      user = current_user
+      # income 3550000 expenses 1000000
+      create :item, amount: 3500000, kind: :income, happened_at: '2024-7-1T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-2T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-3T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-4T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-5T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-6T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-7T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-8T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-9T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-10T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-11T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-12T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-13T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-14T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-15T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-16T00:00:00+08:00', user: user
+      create :item, amount: 56250, kind: :expenses, happened_at: '2024-7-17T00:00:00+08:00', user: user
+      create :item, amount: 100000, kind: :expenses, happened_at: '2024-7-19T00:00:00+08:00', user: user
+      create :item, amount: 50000, kind: :income, happened_at: '2024-7-20T00:00:00+08:00', user: user
+      do_request
+      expect(status).to eq 200
+      json = JSON.parse response_body
+      expect(json['income']).to eq 3550000
+      expect(json['expenses']).to eq 1000000
+      expect(json['balance']).to eq 2550000
+    end
+
   end
 end
