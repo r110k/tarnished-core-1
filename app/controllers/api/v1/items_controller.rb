@@ -16,9 +16,9 @@ class Api::V1::ItemsController < ApplicationController
     current_user_id = request.env['current_user_id']
     return head :unauthorized if current_user_id.nil?
     items = Item.where(user_id: current_user_id)
-        .where(kind: params[:kind])
         .where(happened_at: params[:happened_after]..params[:happened_before])
-        .page params[:page]
+    items = items.where(kind: params[:kind]) unless params[:kind].blank?
+    items = items.page params[:page]
     render json: { 
       resources: items,
       pager: {
