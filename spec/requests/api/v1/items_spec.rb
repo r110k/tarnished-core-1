@@ -111,6 +111,17 @@ RSpec.describe "Items", type: :request do
       expect(json['resources'][0]['id']).to eq item1.id
     end
 
+    it "按 kind 筛选" do
+      user = create :user
+      item1 = create :item, kind: 'income', user: user
+      item2 = create :item, kind: 'expenses', user: user
+
+      get '/api/v1/items?kind=income', headers: user.generate_auth_header
+      expect(response).to have_http_status 200
+      json = JSON.parse(response.body)
+      expect(json['resources'].size).to eq 1
+      expect(json['resources'][0]['id']).to eq item1.id
+    end
   end
 
   describe "统计" do
