@@ -12,13 +12,14 @@ RSpec.describe "Items", type: :request do
       tag1 = create :tag, user: user
       tag2 = create :tag, user: user
 
-      post '/api/v1/items', params: { amount: "888", tag_ids: [tag1.id, tag2.id], happened_at: '2024-7-23T00:00:00+08:00' } ,headers: user.generate_auth_header
+      post '/api/v1/items', params: { amount: "888", kind: :income ,tag_ids: [tag1.id, tag2.id], happened_at: '2024-7-23T00:00:00+08:00' } ,headers: user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
       expect(json['resource']['id']).to be_an Numeric
       expect(json['resource']['amount']).to eq 888
       expect(json['resource']['user_id']).to eq user.id
       expect(json['resource']['happened_at']).to eq '2024-07-22T16:00:00.000Z'
+      expect(json['resource']['kind']).to eq "income"
     end
 
     it "创建账目时 amount、tag_ids 必填" do
