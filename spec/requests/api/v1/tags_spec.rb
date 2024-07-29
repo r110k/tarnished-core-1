@@ -49,11 +49,12 @@ RSpec.describe "Tags", type: :request do
 
     it "登陆后创建标签" do
       user = create :user
-      post '/api/v1/tags', params: {name: "tag_1", sign: "sign_1", user_id: user.id} ,headers: user.generate_auth_header
+      post '/api/v1/tags', params: {name: "tag_1", sign: "sign_1", user_id: user.id, kind: 'income'} ,headers: user.generate_auth_header
       expect(response).to have_http_status :ok
       json = JSON.parse(response.body)
       expect(json['resource']['name']).to eq 'tag_1'
       expect(json['resource']['sign']).to eq 'sign_1'
+      expect(json['resource']['kind']).to eq 'income'
     end
 
     it "登陆后创建标签失败,因为没有填写name" do
