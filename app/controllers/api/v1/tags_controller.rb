@@ -33,13 +33,15 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def destroy
-    current_user = User.find request.env['current_user_id']
-    return render status: :unauthorized if current_user.nil?
+    current_user_id = request.env['current_user_id']
     tag = Tag.find params[:id]
     return head :not_found if tag.nil?
-    return head :forbidden unless tag.user_id === current_user.id
+    return head :forbidden unless tag.user_id === current_user_id
     tag.deleted_at = Time.now
-    if (tag.save)
+    if tag.save
+      if params[:with_items]
+        Item.where('tag_ids && ARRAY[?]::bigint[]', [tag.id]).destroy_all
+      end
       head :ok
     else
       render json: { errors: tag.errors }, status: :unprocessable_entity
@@ -47,11 +49,10 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def show
-    current_user = User.find request.env['current_user_id']
-    return render status: :unauthorized if current_user.nil?
+    current_user_id = request.env['current_user_id']
     tag = Tag.find params[:id]
     return head :not_found if tag.nil?
-    return head :forbidden unless tag.user_id === current_user.id
+    return head :forbidden unless tag.user_id === current_user_id
     render json: { resource: tag }
   end
 end

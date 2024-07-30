@@ -126,6 +126,18 @@ RSpec.describe "Tags", type: :request do
       tag.reload
       expect(tag.deleted_at).to eq nil
     end
+
+    it "删除标签和对应的记账" do
+      user = create :user
+      tag = create :tag, user: user
+      create_list :item, 2, user: user, tag_ids: [tag.id]
+      expect {
+        delete "/api/v1/tags/#{tag.id}?with_items=true", headers: user.generate_auth_header
+      }.to change { Item.count }.by -2
+      expect(response).to have_http_status(200)
+      tag.reload
+      expect(tag.deleted_at).not_to eq nil
+    end
   end
 
   describe "获取单个标签" do
