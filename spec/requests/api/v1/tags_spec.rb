@@ -140,6 +140,20 @@ RSpec.describe "Tags", type: :request do
       expect(items.first.deleted_at).not_to eq nil
       expect(items.second.deleted_at).not_to eq nil
     end
+
+    it "传 with_iteems = false 时只删除标签不删除对应的记账" do
+      user = create :user
+      tag = create :tag, user: user
+      items = create_list :item, 2, user: user, tag_ids: [tag.id]
+      delete "/api/v1/tags/#{tag.id}?with_items=false", headers: user.generate_auth_header
+      expect(response).to have_http_status(200)
+      tag.reload
+      items.first.reload
+      items.second.reload
+      expect(tag.deleted_at).not_to eq nil
+      expect(items.first.deleted_at).to eq nil
+      expect(items.second.deleted_at).to eq nil
+    end
   end
 
   describe "获取单个标签" do
