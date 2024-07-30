@@ -7,4 +7,8 @@ class Tag < ApplicationRecord
   validates :name, length: { maximum: 12 }
   validates :sign, presence: true
   validates :kind, presence: true
+
+  def self.default_scope
+    where(deleted_at: nil)
+  end
 end
