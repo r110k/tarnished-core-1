@@ -56,6 +56,7 @@ RSpec.describe "Items", type: :request do
       expect(response).to have_http_status 200
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
+      expect(json['resources'].first["tags"].size).to eq 1
     end
 
     it "按时间筛选" do

@@ -18,4 +18,8 @@ class Item < ApplicationRecord
     end
   end
 
+  def tags
+    Tag.where(id: tag_ids)
+  end
+
 end
