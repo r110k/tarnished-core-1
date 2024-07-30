@@ -26,3 +26,6 @@
 # Ignore some cache
 /vendor/cache
 /tmp/deploy_cache/*
+
+# Ignore doc(doc update datetime too frequently.) First / make that only doc in root dir be ignored.
+/doc/api
