@@ -22,3 +22,6 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+* 删除 git 仓库缓存的文档内容
+`git rm -r --cached /doc/api ` 
