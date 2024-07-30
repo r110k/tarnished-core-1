@@ -7,6 +7,9 @@ function title {
   echo
 }
 
+title '💀 运行测试用例'
+rspec || exit 1
+
 user=tarnished-user
 # ucloud
 ip=152.32.233.140
