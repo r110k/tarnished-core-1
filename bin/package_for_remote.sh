@@ -9,10 +9,10 @@ function title {
 
 user=tarnished-user
 # ucloud
-#ip=152.32.233.140
+ip=152.32.233.140
 
 # aliyun
-ip=47.116.30.230
+# ip=47.116.30.230
 
 time=$(date +'%Y%m%d-%H%M%S')
 cache_dir=tmp/deploy_cache
