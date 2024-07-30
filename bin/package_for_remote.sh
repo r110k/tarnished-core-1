@@ -10,6 +10,9 @@ function title {
 title '💀 运行测试用例'
 rspec || exit 1
 
+title '📜 重新生成文档'
+rspec || exit 2
+
 user=tarnished-user
 # ucloud
 ip=152.32.233.140
