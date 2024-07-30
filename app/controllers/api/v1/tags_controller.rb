@@ -38,14 +38,18 @@ class Api::V1::TagsController < ApplicationController
     return head :not_found if tag.nil?
     return head :forbidden unless tag.user_id === current_user_id
     tag.deleted_at = Time.now
-    if tag.save
-      if params[:with_items]
-        Item.where('tag_ids && ARRAY[?]::bigint[]', [tag.id]).destroy_all
+    ActiveRecord::Base.transaction do
+      begin
+        tag.save!
+        if params[:with_items]
+          Item.where('tag_ids && ARRAY[?]::bigint[]', [tag.id])
+              .update!(deleted_at: Time.now)
+        end
+      rescue => exception
+        return render json: { errors: tag.errors }, status: :unprocessable_entity
       end
-      head :ok
-    else
-      render json: { errors: tag.errors }, status: :unprocessable_entity
     end
+    head :ok
   end
 
   def show
