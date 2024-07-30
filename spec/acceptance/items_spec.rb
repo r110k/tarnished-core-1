@@ -132,6 +132,7 @@ resource "账目" do
       expect(json['total']).to eq 10000
       expect(json['groups'][0]['tag_id']).to eq tag3.id
       expect(json['groups'][0]['amount']).to eq 9000
+      expect(json['groups'][0]['tag']['name']).to eq tag3.name
       expect(json['groups'][1]['tag_id']).to eq tag2.id
       expect(json['groups'][1]['amount']).to eq 6000
       expect(json['groups'][2]['tag_id']).to eq tag1.id

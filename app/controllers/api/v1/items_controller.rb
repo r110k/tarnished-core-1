@@ -37,7 +37,9 @@ class Api::V1::ItemsController < ApplicationController
     items = Item.where(user_id: current_user_id)
       .where(kind: params[:kind])
       .where(happened_at: params[:happened_after]..params[:happened_before])
+    tags = []
     items.each do |item|
+      tags += item.tags
       if params[:group_by] == 'happened_at'
         key = item.happened_at.in_time_zone('Beijing').strftime('%F')
         hash[key] ||= 0
@@ -54,7 +56,7 @@ class Api::V1::ItemsController < ApplicationController
     # # <=> spaceship sign 用 A - B -1 升序 （感叹号是原地自升，不生成新的）
     # groups.sort! { |a, b| a[:happened_at] <=> b[:happened_at] }
     # 上面三行可以使用链式调用改写为
-    groups = hash.map { |key, value| { "#{params[:group_by]}": key, amount: value } }
+    groups = hash.map { |key, value| { "#{params[:group_by]}": key,tag: tags.find { |t| t.id == key },amount: value } }
     if params[:group_by] == 'happened_at'
       groups.sort! { |a, b| a[:happened_at] <=> b[:happened_at] }
     elsif params[:group_by] == 'tag_id'
