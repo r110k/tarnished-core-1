@@ -40,10 +40,8 @@ class Api::V1::TagsController < ApplicationController
     tag.deleted_at = Time.now
     ActiveRecord::Base.transaction do
       begin
-        if params[:with_items] == 'true'
-          Item.where('tag_ids && ARRAY[?]::bigint[]', [tag.id])
-              .update!(deleted_at: Time.now)
-        end
+        Item.where('tag_ids && ARRAY[?]::bigint[]', [tag.id])
+            .update!(deleted_at: Time.now)
         tag.save!
       rescue => exception
         return render json: { errors: tag.errors }, status: :unprocessable_entity
