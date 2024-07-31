@@ -18,7 +18,7 @@ RSpec.describe "Items", type: :request do
       expect(json['resource']['id']).to be_an Numeric
       expect(json['resource']['amount']).to eq 888
       expect(json['resource']['user_id']).to eq user.id
-      expect(json['resource']['happened_at']).to eq '2024-07-22T16:00:00.000Z'
+      expect(json['resource']['happened_at']).to eq '2024-07-23T00:00:00.000+08:00'
       expect(json['resource']['kind']).to eq "income"
     end
 
