@@ -57,6 +57,7 @@ RSpec.describe "Items", type: :request do
       json = JSON.parse(response.body)
       expect(json['resources'].size).to eq 1
       expect(json['resources'].first["tags"].size).to eq 1
+      expect(json['pager']['total']).to eq Item.default_per_page + 1
     end
 
     it "按时间筛选" do

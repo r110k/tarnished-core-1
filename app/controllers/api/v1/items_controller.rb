@@ -24,7 +24,7 @@ class Api::V1::ItemsController < ApplicationController
       pager: {
         page: params[:page] || 1,
         per_page: Item.default_per_page,
-	      total: Item.count
+	      total: items.total_count
       }
     }, methods: :tags
   end
