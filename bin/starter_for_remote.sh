@@ -65,13 +65,10 @@ docker run -d -p 3000:3000 \
             -e DB_PASSWORD=$DB_PASSWORD \
             tarnishedcore:$version
 
-title '⏏️ 是否要更新数据库?[y/N]'
-read ans
-case $ans in
-  y|Y|1 ) echo 'yes'; title '🔴 执行更新数据库...'; docker exec $container_name bin/rails db:create db:migrate ;;
-  n|N|2 ) echo 'no';;
-  "" ) echo 'no';;
-esac
+if [ ! -z "$need_migrate" ]; then
+  title '🔴 执行更新数据库...'
+  docker exec $container_name bin/rails db:create db:migrate 
+fi
 
 title "🧸 DOC: docker run"
 docker rm -f $nginx_container_name
