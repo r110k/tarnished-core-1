@@ -6,6 +6,7 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
+gem 'rack-cors'
 gem 'kaminari'
 gem 'rspec_api_documentation', path: './vendor/rspec_api_documentation'
 gem 'jwt'
