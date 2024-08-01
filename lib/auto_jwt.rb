@@ -8,7 +8,7 @@ class AutoJwt
     # [200, {}, ['Hello, World!', 'Tarnished!']]
 
     # jwt 跳过白名单
-    return @app.call(env) if ['/api/v1/session', '/api/v1/validation_codes'].include? env['PATH_INFO']
+    return @app.call(env) if ['/', '/api/v1/session', '/api/v1/validation_codes'].include? env['PATH_INFO']
 
     header = env['HTTP_AUTHORIZATION']
     # Bearer jwt
