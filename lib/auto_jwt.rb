@@ -17,9 +17,9 @@ class AutoJwt
       # payload ex: [{"user_id"=>24}, {"alg"=>"HS256"}]
       payload = JWT.decode jwt, Rails.application.credentials.hmac_secret, true, { algorithm: 'HS256' }
     rescue JWT::ExpiredSignature
-      return [401, {}, [JSON.generate({ reason: 'token 失效' })]]
+      return [401, { 'Content-Type' => 'application/json; charset=UTF-8' }, [JSON.generate({ reason: 'token 失效' })]]
     rescue
-      return [401, {}, [JSON.generate({ reason: 'token 非法' })]]
+      return [401, { 'Content-Type' => 'application/json; charset=UTF-8' }, [JSON.generate({ reason: 'token 非法' })]]
     end
     env['current_user_id'] = payload[0]['user_id'] rescue nil
     @status, @headers, @response = @app.call(env)
