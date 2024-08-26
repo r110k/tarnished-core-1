@@ -29,7 +29,7 @@ resource "标签" do
   end
 
   post '/api/v1/tags' do
-    parameter :name, '名称', required: true
+    parameter :name, '名称，最多十二个字符', required: true
     parameter :sign, '符号', required: true
     parameter :kind, '类型', required: true, in: [ 'income', 'expenses']
 
@@ -59,7 +59,7 @@ resource "标签" do
     let(:tag) { create :tag, user: current_user }
     let(:id) { tag.id }
 
-    parameter :name, '名称'
+    parameter :name, '名称，最多十二个字符'
     parameter :sign, '符号'
 
     with_options :scope => :resources do
