@@ -9,7 +9,7 @@ resource "会话" do
     response_field :jwt, '用于验证用户身份的 token'
 
     let(:email) { 'judy@civilization.vi' }
-    let(:code) { '926401' }
+    let(:code) { '000000' }
 
     example "登录" do
       do_request
