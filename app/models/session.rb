@@ -11,7 +11,7 @@ class Session
     return if Rails.env.test? and self.code == '000000'
     # 检查是依次执行的，前序检查不过不会阻塞后续检查执行
     return if self.code.empty?
-    self.errors.add :email, :not_found unless validation_code_exists?
+    self.errors.add :code, :not_found unless validation_code_exists?
   end
 
   def validation_code_exists?
