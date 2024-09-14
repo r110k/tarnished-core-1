@@ -11,8 +11,8 @@ resource "账目" do
 
   get '/api/v1/items' do
     parameter :page, '页码'
-    parameter :happened_after, '创建时间起点'
-    parameter :happened_before, '创建时间终点'
+    parameter :happened_after, '发生时间起点'
+    parameter :happened_before, '发生时间终点'
 
     # response_field :id, 'ID',scope: :resources
     # response_field :amount, '金额（单位：分）', scope: :resources
